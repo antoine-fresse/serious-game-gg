@@ -16,52 +16,23 @@ public class CardAction : Card {
         target.reduceReputation(attack);
     }
 
-    public override bool useOn(Target t) {
-        Debug.Log(fullName + " used on " + t.fullName);
-
+    public override bool isValidTarget(Target t) {
         if (t.type == Type.Player) {
             if (!canTargetPlayers)
                 return false;
 
             Player p = (Player)t;
-            if (p == owner){
-                if (canTargetAllies) {
-                    // DEFAULT BEHAVIOUR
-                    p.reduceReputation(attack);
-                    owner.hand.Remove((Card)this);
-                    GameObject.Destroy(this);
-                    return true;
-                }
-                
-            }
-            else {
-                // DEFAULT BEHAVIOUR
-                p.reduceReputation(attack);
-                owner.hand.Remove((Card)this);
-                GameObject.Destroy(this);
-                return true;
-            }
-                
+            return p == owner ? canTargetAllies : true;
         }
         else {
             Card c = (Card)t;
-            if (owner == c.owner) {
-                if (canTargetAllies) {
-                    // DEFAULT BEHAVIOUR
-                    c.reduceReputation(attack);
-                    owner.hand.Remove((Card)this);
-                    GameObject.Destroy(this);
-                    return true;
-                }
-            }
-            else {
-                // DEFAULT BEHAVIOUR
-                c.reduceReputation(attack);
-                owner.hand.Remove((Card)this);
-                GameObject.Destroy(this);
-                return true;
-            }
+            return owner == c.owner ? canTargetAllies : true;
         }
-        return false;
+    }
+
+    public override void useOn(Target t) {
+        owner.increaseCorruption(corruptionCost);
+        owner.increaseSexisme(sexismeCost);
+        Debug.Log(fullName + " used on " + t.fullName);
     }
 }

@@ -10,13 +10,19 @@ public class CardActor : Card {
         cardType = CardType.Actor;
 	}
 
-    public override bool useOn(Target c) {
+    public override void useOn(Target c) {
         Debug.Log(fullName + " used on " + c.fullName);
+
+        canAttack = false;
+    }
+
+    public override bool isValidTarget(Target t) {
         return true;
     }
 
-    public void StartTurn() {
-        canAttack = true;
+    public override void startTurn() {
+        if(place == Place.Board)
+            canAttack = true;
     }
 
 

@@ -20,6 +20,10 @@ public abstract class Card : Target {
     public int attack = 1;
     public int reputation = 1;
 
+    public int corruptionCost = 0;
+    public int sexismeCost = 0;
+
+
 
     public bool hidden = false;
     public Player owner;
@@ -27,7 +31,8 @@ public abstract class Card : Target {
     public Place place = Place.Deck;
     public CardType cardType = CardType.Action;
 
-    public abstract bool useOn(Target c);
+    public abstract void useOn(Target c);
+    public abstract bool isValidTarget(Target c);
     public void reduceReputation(int value) {
         reputation -= value;
         if (reputation <= 0) {
@@ -35,6 +40,7 @@ public abstract class Card : Target {
         }
     }
 
+    public virtual void startTurn() { }
 
     void OnMouseUp(){
         GameManager.instance.elementClicked(this);

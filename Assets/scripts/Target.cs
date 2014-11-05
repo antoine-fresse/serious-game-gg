@@ -8,6 +8,5 @@ public enum Type {
 public abstract class Target : MonoBehaviour {
 
     public Type type;
-
     public string fullName;
 }

@@ -74,4 +74,30 @@ public class Player : Target {
         reputationText.text = reputation.ToString();
     }
 
+
+    public bool isInHand(Card c) {
+        return hand.Contains(c);   
+    }
+
+    public bool isInDeck(Card c) {
+        return deck.Contains(c);
+    }
+
+    public void shuffleDeck() {
+        // TODO SHUFFLE DECK
+    }
+
+
+    public void increaseCorruption(int cost) {
+        if (GameManager.instance.contextCard) {
+            cost *= (int)GameManager.instance.contextCard.corruptionMultiplier;
+        }
+        corruption += cost;
+    }
+    public void increaseSexisme(int cost) {
+        if (GameManager.instance.contextCard) {
+            cost *= (int)GameManager.instance.contextCard.sexismeMultiplier;
+        }
+        sexisme += cost;
+    }
 }

@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour {
 
     public Card cardSelected;
 
+    public CardContext contextCard;
+
 	// Use this for initialization
 	void Awake () {
         instance = this;
@@ -42,7 +44,7 @@ public class GameManager : MonoBehaviour {
                 if (c.type == Type.Card) {
                     Card ca = (Card)c;
                     if (ca.place == Place.Board) {
-                        result = cardSelected.useOn(c);
+                        result = cardSelected.isValidTarget(c);
                     }
                     else {
                         cardSelected.renderer.material.color = new Color(1.0f, 1.0f, 1.0f);
@@ -52,11 +54,12 @@ public class GameManager : MonoBehaviour {
                     }
                 }
                 else {
-                    result = cardSelected.useOn(c);
+                    result = cardSelected.isValidTarget(c);
                 }
                 
                 Debug.Log(result);
                 if (result) {
+                    cardSelected.useOn(c);
                     cardSelected.renderer.material.color = new Color(1.0f, 1.0f, 1.0f);
                     cardSelected = null;
                 }
