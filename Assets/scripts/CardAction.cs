@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class CardAction : Card {
@@ -33,6 +33,18 @@ public class CardAction : Card {
     public override void useOn(Target t) {
         owner.increaseCorruption(corruptionCost);
         owner.increaseSexisme(sexismeCost);
+
+        if (t.type == Type.Card)
+        {
+            Card c = (Card)t;
+            c.reduceReputation(attack);
+        }
+        else
+        {
+            Player p = (Player)t;
+            p.reduceReputation(attack);
+        }
+
         Debug.Log(fullName + " used on " + t.fullName);
     }
 }

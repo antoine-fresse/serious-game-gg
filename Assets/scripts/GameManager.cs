@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class GameManager : MonoBehaviour {
@@ -31,11 +31,11 @@ public class GameManager : MonoBehaviour {
     public void elementClicked(Target c){
         if (cardSelected == null && c.type == Type.Card) {
             cardSelected = (Card)c;
-            cardSelected.renderer.material.color = new Color(1.0f, 0.0f, 0.0f);
+            cardSelected.setSelected(true);
         }
         else if (cardSelected != null) {
             if (cardSelected == c) {
-                cardSelected.renderer.material.color = new Color(1.0f, 1.0f, 1.0f);
+                cardSelected.setSelected(false);
                 cardSelected = null;
             }
             else {
@@ -47,9 +47,9 @@ public class GameManager : MonoBehaviour {
                         result = cardSelected.isValidTarget(c);
                     }
                     else {
-                        cardSelected.renderer.material.color = new Color(1.0f, 1.0f, 1.0f);
+                        cardSelected.setSelected(false);
                         cardSelected = (Card)c;
-                        cardSelected.renderer.material.color = new Color(1.0f, 0.0f, 0.0f);
+                        cardSelected.setSelected(true);
                         return;
                     }
                 }
@@ -60,7 +60,7 @@ public class GameManager : MonoBehaviour {
                 Debug.Log(result);
                 if (result) {
                     cardSelected.useOn(c);
-                    cardSelected.renderer.material.color = new Color(1.0f, 1.0f, 1.0f);
+                    cardSelected.setSelected(false);
                     cardSelected = null;
                 }
             }

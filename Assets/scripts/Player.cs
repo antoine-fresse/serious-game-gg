@@ -1,11 +1,12 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
 public class Player : Target {
 
-    public Text reputationText;
+    public RectTransform handPos;
+    public RectTransform boardPos;
 
     public int maxCardsInHand = 6;
     public int reputation = 30;
@@ -16,13 +17,15 @@ public class Player : Target {
     public List<Card> hand;
     public List<Card> board;
 
+    public int cardWidth = 200;
+
 	// Use this for initialization
 	void Start () {
-        reputationText.text = reputation.ToString();
 	}
 
-    void OnMouseUp() {
-        GameManager.instance.elementClicked(this);
+    public void draw()
+    {
+        draw(1);
     }
 
     public void draw(int times = 1) {
@@ -35,18 +38,31 @@ public class Player : Target {
             if (hand.Count < maxCardsInHand) {
                 Card d = deck[0];
                 deck.RemoveAt(0);
+                d.show();
                 hand.Add(d);
+                d.place = Place.Hand;
                 draw(times - 1);
             }
         }
     }
     void Update() {
+        displayDeck();
         displayHand();
         displayBoard();
     }
+
+    public void displayDeck()
+    {
+        foreach (var card in deck)
+        {
+            card.transform.position = new Vector3(10000, 0, 0);
+            card.hide();
+        }
+    }
+
     public void displayHand() {
-        Vector3 pos = transform.position + new Vector3(-hand.Count/2,0,0);
-        var offset = new Vector3(1,0,0);
+        Vector3 pos = handPos.position + new Vector3(-cardWidth * hand.Count / 2, 0, 0);
+        var offset = new Vector3(cardWidth, 0, 0);
         foreach (var card in hand) {
             card.transform.position = pos;
             pos += offset;
@@ -54,8 +70,8 @@ public class Player : Target {
     }
 
     public void displayBoard() {
-        Vector3 pos = gameObject.transform.FindChild("Board").transform.position + new Vector3(-board.Count / 2, 0, 0);
-        var offset = new Vector3(1, 0, 0);
+        Vector3 pos = boardPos.position + new Vector3(-cardWidth * board.Count / 2, 0, 0);
+        var offset = new Vector3(cardWidth, 0, 0);
         foreach (var card in board) {
             card.transform.position = pos;
             pos += offset;
@@ -70,8 +86,6 @@ public class Player : Target {
         {
             GameManager.instance.playerDied(this);
         }
-
-        reputationText.text = reputation.ToString();
     }
 
 

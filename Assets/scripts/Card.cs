@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public enum CardType
@@ -16,6 +17,7 @@ public enum Place {
 
 public abstract class Card : Target {
 
+    public string description;
 
     public int attack = 1;
     public int reputation = 1;
@@ -23,7 +25,9 @@ public abstract class Card : Target {
     public int corruptionCost = 0;
     public int sexismeCost = 0;
 
-
+    public Sprite spriteNormal;
+    public Sprite spriteSelected;
+    public Sprite spriteHidden;
 
     public bool hidden = false;
     public Player owner;
@@ -42,8 +46,38 @@ public abstract class Card : Target {
 
     public virtual void startTurn() { }
 
-    void OnMouseUp(){
-        GameManager.instance.elementClicked(this);
+
+    public void setSelected(bool isSelected)
+    {
+        if (isSelected)
+        {
+            gameObject.GetComponent<Image>().sprite = spriteSelected;
+        }
+        else
+        {
+            gameObject.GetComponent<Image>().sprite = spriteNormal;
+        }
+    }
+
+    public void hide()
+    {
+        hidden = true;
+        gameObject.GetComponent<Image>().sprite = spriteHidden;
+
+        foreach (Transform child in transform)
+        {
+            child.gameObject.SetActive(false);
+        }
+
+    }
+    public void show()
+    {
+        hidden = false;
+        gameObject.GetComponent<Image>().sprite = spriteNormal;
+        foreach (Transform child in transform)
+        {
+            child.gameObject.SetActive(true);
+        }
     }
 
 }
