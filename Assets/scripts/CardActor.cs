@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class CardActor : Card {
@@ -20,7 +20,7 @@ public class CardActor : Card {
         return true;
     }
 
-    public override void startTurn() {
+    public override void OnTurnStart() {
         if(place == Place.Board)
             canAttack = true;
     }

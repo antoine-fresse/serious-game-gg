@@ -11,10 +11,6 @@ public class CardAction : Card {
     void Start() {
         cardType = CardType.Action;
     }
-    public void useCard() {
-        Player target = GameManager.instance.getOtherPlayer(owner);
-        target.reduceReputation(attack);
-    }
 
     public override bool isValidTarget(Target t) {
         if (t.type == Type.Player) {
@@ -26,6 +22,9 @@ public class CardAction : Card {
         }
         else {
             Card c = (Card)t;
+            if (c.place != Place.Board)
+                return false;
+
             return owner == c.owner ? canTargetAllies : true;
         }
     }
@@ -44,6 +43,8 @@ public class CardAction : Card {
             Player p = (Player)t;
             p.reduceReputation(attack);
         }
+
+        destroy();
 
         Debug.Log(fullName + " used on " + t.fullName);
     }

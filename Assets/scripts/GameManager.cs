@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class GameManager : MonoBehaviour {
@@ -12,6 +13,9 @@ public class GameManager : MonoBehaviour {
 
     public CardContext contextCard;
 
+    public RectTransform yourTurnText;
+    public int turn = 2;
+
 	// Use this for initialization
 	void Awake () {
         instance = this;
@@ -24,14 +28,43 @@ public class GameManager : MonoBehaviour {
         
     }
 
+    public void endTurn()
+    {
+        turn = turn == 1 ? 2 : 1;
+
+        if(cardSelected)
+            cardSelected.setSelected(false);
+        if (turn == 1)
+        {
+            LeanTween.move(yourTurnText, new Vector3(0f, 0f, 0f), 1f);
+            LeanTween.move(yourTurnText, new Vector3(0f, (float)Screen.height, 0f), 0.01f).setDelay(2f);
+        }
+
+        activePlayer().OnTurnStart();
+    }
+
+    public Player activePlayer()
+    {
+        return turn == 1 ? player1 : player2;
+    }
+
     public Player getOtherPlayer(Player p){
         return p == player1 ? player2 : player1;
     }
 
     public void elementClicked(Target c){
+
+        // If not our turn skip
+        if (turn != 1)
+            return;
+
         if (cardSelected == null && c.type == Type.Card) {
-            cardSelected = (Card)c;
-            cardSelected.setSelected(true);
+            Card ca = (Card)c;
+            if (ca.owner == player1)
+            {
+                cardSelected = ca;
+                cardSelected.setSelected(true);
+            }
         }
         else if (cardSelected != null) {
             if (cardSelected == c) {
@@ -46,7 +79,7 @@ public class GameManager : MonoBehaviour {
                     if (ca.place == Place.Board) {
                         result = cardSelected.isValidTarget(c);
                     }
-                    else {
+                    else if(ca.owner == player1) {
                         cardSelected.setSelected(false);
                         cardSelected = (Card)c;
                         cardSelected.setSelected(true);

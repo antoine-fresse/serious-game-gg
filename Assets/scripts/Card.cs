@@ -12,7 +12,8 @@ public enum CardType
 public enum Place {
     Deck,
     Hand,
-    Board
+    Board,
+    Graveyard
 }
 
 public abstract class Card : Target {
@@ -44,7 +45,7 @@ public abstract class Card : Target {
         }
     }
 
-    public virtual void startTurn() { }
+    public virtual void OnTurnStart() { }
 
 
     public void setSelected(bool isSelected)
@@ -80,5 +81,11 @@ public abstract class Card : Target {
         }
     }
 
+    public void destroy()
+    {
+        owner.removeCard(this);
+        place = Place.Graveyard;
+        gameObject.transform.position = new Vector3(0, 10000, 0);
+    }
 }
 

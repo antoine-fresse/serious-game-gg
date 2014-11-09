@@ -23,10 +23,12 @@ public class Player : Target {
 	void Start () {
 	}
 
-    public void draw()
+
+    public void OnTurnStart()
     {
-        draw(1);
+        draw();
     }
+
 
     public void draw(int times = 1) {
         if (times < 1) {
@@ -66,6 +68,11 @@ public class Player : Target {
         foreach (var card in hand) {
             card.transform.position = pos;
             pos += offset;
+
+            if (this == GameManager.instance.player2)
+            {
+                card.hide();
+            }
         }
     }
 
@@ -113,5 +120,15 @@ public class Player : Target {
             cost *= (int)GameManager.instance.contextCard.sexismeMultiplier;
         }
         sexisme += cost;
+    }
+
+    public void removeCard(Card c)
+    {
+        if (hand.Contains(c))
+            hand.Remove(c);
+        if (board.Contains(c))
+            board.Remove(c);
+        if (deck.Contains(c))
+            deck.Remove(c);
     }
 }
