@@ -30,10 +30,15 @@ public class GameManager : MonoBehaviour {
 
     public void endTurn()
     {
+		
+		activePlayer().OnTurnEnd();
+
         turn = turn == 1 ? 2 : 1;
 
-        if(cardSelected)
-            cardSelected.setSelected(false);
+		if (cardSelected) {
+			cardSelected.setSelected(false);
+			cardSelected = null;
+		}
         if (turn == 1)
         {
             LeanTween.move(yourTurnText, new Vector3(0f, 0f, 0f), 1f);
@@ -62,11 +67,15 @@ public class GameManager : MonoBehaviour {
             Card ca = (Card)c;
             if (ca.owner == player1)
             {
+				if (ca.cardType == CardType.Actor)
+					if (!((CardActor)ca).canAttack)
+						return;
+
                 cardSelected = ca;
                 cardSelected.setSelected(true);
             }
         }
-        else if (cardSelected != null) {
+        else if (cardSelected != null) { // A card is selected
             if (cardSelected == c) {
                 cardSelected.setSelected(false);
                 cardSelected = null;
@@ -86,9 +95,15 @@ public class GameManager : MonoBehaviour {
                         return;
                     }
                 }
-                else {
+                else if(c.type == Type.Player){
                     result = cardSelected.isValidTarget(c);
-                }
+				} else { // Board
+					if (cardSelected.place == Place.Hand && cardSelected.cardType == CardType.Actor) {
+						cardSelected.owner.moveToBoard(cardSelected);
+						cardSelected.setSelected(false);
+						cardSelected = null;
+					}
+				}
                 
                 Debug.Log(result);
                 if (result) {

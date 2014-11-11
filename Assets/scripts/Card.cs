@@ -16,6 +16,7 @@ public enum Place {
     Graveyard
 }
 
+[RequireComponent(typeof(CardEffectInterface))]
 public abstract class Card : Target {
 
     public string description;
@@ -36,6 +37,9 @@ public abstract class Card : Target {
     public Place place = Place.Deck;
     public CardType cardType = CardType.Action;
 
+
+	public CardEffectInterface effect;
+
     public abstract void useOn(Target c);
     public abstract bool isValidTarget(Target c);
     public void reduceReputation(int value) {
@@ -45,18 +49,29 @@ public abstract class Card : Target {
         }
     }
 
-    public virtual void OnTurnStart() { }
+	public virtual void OnTurnStart() { effect.OnTurnStart(); }
 
+	public virtual void OnTurnEnd() { effect.OnTurnEnd(); }
+
+    protected override void init()
+    {
+		base.init();
+        type = Type.Card;
+		effect = GetComponent<CardEffectInterface>();
+		effect.OnInit();
+    }
 
     public void setSelected(bool isSelected)
     {
         if (isSelected)
         {
             gameObject.GetComponent<Image>().sprite = spriteSelected;
+			effect.OnSelected();
         }
         else
         {
             gameObject.GetComponent<Image>().sprite = spriteNormal;
+			effect.OnDeselected();
         }
     }
 
@@ -83,6 +98,9 @@ public abstract class Card : Target {
 
     public void destroy()
     {
+		if (place == Place.Board) {
+			effect.OnDeath();
+		}
         owner.removeCard(this);
         place = Place.Graveyard;
         gameObject.transform.position = new Vector3(0, 10000, 0);

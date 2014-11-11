@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class CardContext : Card {
@@ -7,7 +7,8 @@ public class CardContext : Card {
     public float sexismeMultiplier = 1.0f;
 
     // Use this for initialization
-    void Start() {
+    protected override void init(){
+        base.init();
         cardType = CardType.Context;
     }
 

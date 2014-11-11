@@ -20,15 +20,45 @@ public class Player : Target {
     public int cardWidth = 200;
 
 	// Use this for initialization
-	void Start () {
-	}
+
+    protected override void init(){
+		base.init();
+        type = Type.Player;
+    }
 
 
     public void OnTurnStart()
     {
         draw();
+        foreach(Card c in board){
+            c.selectable.interactable = true;
+			c.OnTurnStart();
+        }
+        foreach (Card c in hand){
+            c.selectable.interactable = true;
+        }
     }
 
+    public void OnTurnEnd()
+    {
+        foreach (Card c in board){
+            c.selectable.interactable = false;
+			c.OnTurnEnd();
+        }
+        foreach (Card c in hand){
+            c.selectable.interactable = false;
+        }
+    }
+
+	public void moveToBoard(Card c) {
+		if (!hand.Contains(c))
+			return;
+
+		hand.Remove(c);
+		board.Add(c);
+		c.place = Place.Board;
+		c.effect.OnPlacedOnBoard();
+	}
 
     public void draw(int times = 1) {
         if (times < 1) {
@@ -43,6 +73,7 @@ public class Player : Target {
                 d.show();
                 hand.Add(d);
                 d.place = Place.Hand;
+				d.effect.OnDraw();
                 draw(times - 1);
             }
         }
