@@ -24,7 +24,6 @@ public class NetworkManager : MonoBehaviour {
 		_textUI = GetComponent<Text>();
 
 
-
 		PhotonNetwork.automaticallySyncScene = true;
 		PhotonNetwork.ConnectUsingSettings("0.1f");
 		_textUI.text = "Game server : <color=orange>Connecting</color>";
@@ -70,6 +69,7 @@ public class NetworkManager : MonoBehaviour {
 			Pseudo.text = "Anonymous";
 		}
 		PlayerPrefs.SetString("pseudo", Pseudo.text);
+		PhotonNetwork.playerName = Pseudo.text;
 	}
 
 	public void OnButtonClick() {

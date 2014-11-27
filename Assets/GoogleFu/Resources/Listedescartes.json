@@ -1,0 +1,121 @@
+{
+  "Action": [
+    {
+      "GOOGLEFU_TYPE": "GOOGLEFU_TYPE",
+      "name": "string",
+      "desc": "string",
+      "corruptioncost": "int",
+      "sexismecost": "int",
+      "cardeffect": "string",
+      "cardeffectdesc": "string"
+    },
+    {
+      "ACTION_CENSURE": "ACTION_CENSURE",
+      "name": "Censure",
+      "desc": "Suppression massive de commentaires sur reddit - liens entre zoe quinn et un modérateur",
+      "corruptioncost": "1",
+      "sexismecost": "0",
+      "cardeffect": "DefaultEffect",
+      "cardeffectdesc": "Enleve une carte aléatoire de la main adverse"
+    },
+    {
+      "ACTION_DECL": "ACTION_DECL",
+      "name": "Déclaration sans fondement",
+      "desc": "Inconsistencies in ZQ claim",
+      "corruptioncost": "0",
+      "sexismecost": "0",
+      "cardeffect": "DefaultEffect",
+      "cardeffectdesc": "Reduit la réputation de l'adversaire oue la carte ciblée de X"
+    },
+    {
+      "ACTION_REMISEDEPRIX": "ACTION_REMISEDEPRIX",
+      "name": "Remise de prix truquée",
+      "desc": "Indiecade corruption ZQ gagne. award selectionné par un qqn avec qui elle avait une relation",
+      "corruptioncost": "1",
+      "sexismecost": "0",
+      "cardeffect": "DefaultEffect",
+      "cardeffectdesc": "Gagne 5 reputation"
+    },
+    {
+      "ACTION_DMCA": "ACTION_DMCA",
+      "name": "Abus de plainte DMCA",
+      "desc": "Zoe Quinn est accusée d'utiliser les paintes DMCA pour retirer des critiques négatives de youtube",
+      "corruptioncost": "1",
+      "sexismecost": "0",
+      "cardeffect": "DefaultEffect",
+      "cardeffectdesc": "Enleve une carte aléatoire de la main adverse"
+    },
+    {
+      "ACTION_KICKSTARTER": "ACTION_KICKSTARTER",
+      "name": "Objectif de financement participatif atteint",
+      "desc": "TFYC atteignent leur objectif de financement sur indiegogo",
+      "corruptioncost": "0",
+      "sexismecost": "0",
+      "cardeffect": "DefaultEffect",
+      "cardeffectdesc": "Pioche 2 cartes"
+    },
+    {
+      "ACTION_BOMBE": "ACTION_BOMBE",
+      "name": "Alerte à la bombe",
+      "desc": "-",
+      "corruptioncost": "0",
+      "sexismecost": "0",
+      "cardeffect": "DefaultEffect",
+      "cardeffectdesc": "Tue une carte de type non gamergate"
+    },
+    {
+      "ACTION_GAMERSAREDEAD": "ACTION_GAMERSAREDEAD",
+      "name": "Gamers are dead",
+      "desc": "-",
+      "corruptioncost": "0",
+      "sexismecost": "0",
+      "cardeffect": "DefaultEffect",
+      "cardeffectdesc": "Tue une carte de type gamegate"
+    },
+    {
+      "ACTION_MENACESDEMORT": "ACTION_MENACESDEMORT",
+      "name": "Menaces de mort",
+      "desc": "-",
+      "corruptioncost": "0",
+      "sexismecost": "1",
+      "cardeffect": "DefaultEffect",
+      "cardeffectdesc": "Renvoie une carte dans la main du joueur"
+    },
+    {
+      "ACTION_HACK": "ACTION_HACK",
+      "name": "Hack de 4chan",
+      "desc": "-",
+      "corruptioncost": "1",
+      "sexismecost": "0",
+      "cardeffect": "DefaultEffect",
+      "cardeffectdesc": "\"+Y\" sexisme adverse"
+    },
+    {
+      "ACTION_PUBRETIREES": "ACTION_PUBRETIREES",
+      "name": "Retirer les publicités",
+      "desc": "-",
+      "corruptioncost": "0",
+      "sexismecost": "1",
+      "cardeffect": "DefaultEffect",
+      "cardeffectdesc": "Baisse l'attaque d'une carte website"
+    },
+    {
+      "ACTION_CONFESSION": "ACTION_CONFESSION",
+      "name": "Confession",
+      "desc": "-",
+      "corruptioncost": "1",
+      "sexismecost": "0",
+      "cardeffect": "DefaultEffect",
+      "cardeffectdesc": "\"-X\" en corruption ou sexisme"
+    },
+    {
+      "ACTION_HARCELEMENT": "ACTION_HARCELEMENT",
+      "name": "Harcelement",
+      "desc": "-",
+      "corruptioncost": "0",
+      "sexismecost": "1",
+      "cardeffect": "DefaultEffect",
+      "cardeffectdesc": "Empeche une carte d'attaquer"
+    }
+  ]
+}

@@ -37,9 +37,9 @@ public class Player : Target {
             //c.selectable.interactable = true;
 			c.OnTurnStart();
         }
-        foreach (Card c in hand){
+		/*foreach (Card c in hand){
            // c.selectable.interactable = true;
-        }
+        }*/
 		ResetOutlines(GameManager.instance.offlineMode || GameManager.instance.localPlayerTurn);
 	    //boardUI.selectable.interactable = true;
     }
@@ -51,13 +51,20 @@ public class Player : Target {
             //c.selectable.interactable = false;
 			c.OnTurnEnd();
         }
-        foreach (Card c in hand){
+        /*foreach (Card c in hand){
             //c.selectable.interactable = false;
-        }
+        }*/
 		//boardUI.selectable.interactable = false;
     }
 
 	public void MoveToBoard(Card c) {
+		photonView.RPC("MoveToBoardRPC", PhotonTargets.AllBuffered, c.photonView.viewID);
+	}
+
+	[RPC]
+	void MoveToBoardRPC(int viewID) {
+		var c = PhotonView.Find(viewID).GetComponent<Card>();
+
 		if (!hand.Contains(c))
 			return;
 
@@ -207,6 +214,7 @@ public class Player : Target {
 			card.transform.SetParent(GameObject.Find("Cards").transform);
             card.transform.position = boardPos.position + pos;
             pos += offset;
+			card.show();
         }
     }
 

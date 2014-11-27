@@ -23,15 +23,20 @@ public enum PlayerID {
 	Player2
 }
 
-[RequireComponent(typeof(CardEffectInterface))]
+
 public abstract class Card : Target {
 
     public string description;
+	public string effectDesc;
+
 	public Text cardName;
 	public Text cardDesc;
 	public Text cardCost;
+	public Text cardEffect;
 
+	[HideInInspector]
     public int attack = 1;
+	[HideInInspector]
     public int reputation = 1;
 
 	public int baseAttack = 1;
@@ -60,7 +65,13 @@ public abstract class Card : Target {
 
 	public CardEffectInterface effect;
 
-    public abstract void useOn(Target c);
+	public void useOn(Target c) {
+		photonView.RPC("useOnRPC", PhotonTargets.AllBuffered, c.photonView.viewID);
+	}
+
+	[RPC]
+	protected abstract void useOnRPC(int viewID);
+
     public abstract bool isValidTarget(Target c);
     public void ReduceReputation(int value) {
         reputation -= value;
@@ -78,10 +89,13 @@ public abstract class Card : Target {
     {
 		base.init();	    
         TargetType = TargetType.Card;
-
+	    attack = baseAttack;
+	    reputation = baseReputation;
 		cardName.text = fullName;
 
-	    cardDesc.text = Regex.Replace(description, "%ATTACK%", attack.ToString(), RegexOptions.IgnoreCase);
+	    cardDesc.text = description;
+
+		cardEffect.text = Regex.Replace(effectDesc, "%ATTACK%", attack.ToString(), RegexOptions.IgnoreCase);
 
 		switch (place) {
 			case Place.Board:

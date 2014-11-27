@@ -12,8 +12,9 @@ public class CardContext : Card {
         cardType = CardType.Context;
     }
 
-    public override void useOn(Target c) {
-        Debug.Log(fullName + " used on " + c.fullName);
+	[RPC]
+    protected override void useOnRPC(int viewID) {
+        // Do Nothing
     }
 
     public override bool isValidTarget(Target t) {

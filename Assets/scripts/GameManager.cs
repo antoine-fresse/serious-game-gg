@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using DG.Tweening;
-
+using GoogleFu;
 public class GameManager : MonoBehaviour {
 
     public static GameManager instance;
@@ -24,13 +24,33 @@ public class GameManager : MonoBehaviour {
 
 	public bool offlineMode = false;
 
+	public PhotonView photonView;
+
+	public Button buttonEndTurn;
+
+
 	// Use this for initialization
 	void Awake () {
         instance = this;
+		photonView = GetComponent<PhotonView>();
 		Player.cardWidth = 110;
 		PhotonNetwork.offlineMode = offlineMode;
 		localPlayer = PhotonNetwork.isMasterClient ? player1 : player2;
 		localPlayerTurn = localPlayer == player1;
+
+		buttonEndTurn.interactable = localPlayerTurn;
+
+	}
+
+	void Start() {
+		if (PhotonNetwork.isMasterClient) {
+			CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_KICKSTARTER, PlayerID.Player1);
+			CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_GAMERSAREDEAD, PlayerID.Player1);
+		}
+		else {
+			CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_CONFESSION, PlayerID.Player2);
+			CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_REMISEDEPRIX, PlayerID.Player2);
+		}
 	}
 
     void Update() {
@@ -44,9 +64,19 @@ public class GameManager : MonoBehaviour {
         
     }
 
-    public void EndTurn()
+	[RPC]
+	void SetContext(int viewID) {
+		contextCard = PhotonView.Find(viewID).GetComponent<CardContext>();
+		contextCard.owner.RemoveCard(contextCard);
+		contextCard.show();
+	}
+
+	public void EndTurn() {
+		photonView.RPC("EndTurnRPC", PhotonTargets.AllBuffered);
+	}
+	[RPC]
+    void EndTurnRPC()
     {
-		
 		activePlayer().OnTurnEnd();
 
 	    localPlayerTurn = !localPlayerTurn;
@@ -60,15 +90,17 @@ public class GameManager : MonoBehaviour {
 			    .Append(yourTurnText.DOMove(new Vector3(0f, 0f, 0f), 1.0f).SetEase(Ease.OutBounce))
 			    .AppendInterval(1.0f)
 			    .Append(yourTurnText.DOMove(new Vector3(0f, (float) Screen.height*2f, 0f), 0f));
-	    }
+			buttonEndTurn.interactable = true;
+		}
+		else 
+			buttonEndTurn.interactable = false;
+		
         activePlayer().OnTurnStart();
-		/*if(localPlayerTurn)
-			activePlayer().ResetOutlines(true);*/
     }
 
     public Player activePlayer()
     {
-		return localPlayerTurn ? player1 : player2;
+		return localPlayerTurn ? localPlayer : getOtherPlayer(localPlayer);
     }
 
     public Player getOtherPlayer(Player p){
@@ -127,9 +159,7 @@ public class GameManager : MonoBehaviour {
 		                break;
 					case TargetType.Context: {
 						if (cardSelected.cardType == CardType.Context) {
-							contextCard = (CardContext)cardSelected;
-							cardSelected.owner.RemoveCard(cardSelected);
-							
+							photonView.RPC("SetContext", PhotonTargets.AllBuffered, cardSelected.photonView.viewID);
 							cardSelected.setSelected(false);
 							cardSelected = null;
 							activePlayer().ResetOutlines(true);

@@ -30,27 +30,29 @@ public class CardActor : Card {
 		cardStats.text = attackText + "/" + reputationText;
 	}
 
-    public override void useOn(Target c) {
-        Debug.Log(fullName + " used on " + c.fullName);
+	[RPC]
+	protected override void useOnRPC(int viewID) {
+
+		Target c = PhotonView.Find(viewID).GetComponent<Target>();
 
 		if (c.TargetType == TargetType.Player) {
 			Player p = (Player)c;
 			p.ReduceReputation(attack);
 			effect.OnAttackPerformed(c);
 
-			
+
 		} else {
 			Card ca = (Card)c;
 			ca.ReduceReputation(attack);
 			effect.OnAttackPerformed(c);
 			ca.effect.OnAttackReceived(this);
 		}
-	    var dir = (c.transform.position - transform.position)/10f;
+		var dir = (c.transform.position - transform.position) / 10f;
 		DOTween.Sequence()
-				.Append(transform.DOPunchPosition(dir, Mathf.Clamp(dir.sqrMagnitude/100f,0.5f,1f), 0,0));
-        canAttack = false;
+				.Append(transform.DOPunchPosition(dir, Mathf.Clamp(dir.sqrMagnitude / 100f, 0.5f, 1f), 0, 0));
+		canAttack = false;
 		//selectable.interactable = false;
-    }
+	}
 
     public override bool isValidTarget(Target t) {
 

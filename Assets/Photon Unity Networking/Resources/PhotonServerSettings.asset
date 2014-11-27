@@ -19,13 +19,9 @@ MonoBehaviour:
   AppID: e42c07a9-5018-47d3-9573-e3912339c79e
   PingCloudServersOnAwake: 0
   RpcList:
-  - Chat
-  - DestroyRpc
-  - InstantiateRpc
-  - OnAwakeRPC
-  - PickupItemInit
-  - PunPickup
-  - PunPickupSimple
-  - PunRespawn
-  - RequestForPickupTimes
+  - CreateActionRPC
+  - EndTurnRPC
+  - MoveToBoardRPC
+  - SetContext
+  - useOnRPC
   DisableAutoOpenWizard: 0

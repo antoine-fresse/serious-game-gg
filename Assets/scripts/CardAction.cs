@@ -14,6 +14,7 @@ public class CardAction : Card {
 
     }
 
+	
     public override bool isValidTarget(Target t) {
         if (t.TargetType == TargetType.Player) {
             if (!canTargetPlayers)
@@ -31,25 +32,25 @@ public class CardAction : Card {
         }
     }
 
-    public override void useOn(Target t) {
-        owner.IncreaseCorruption(corruptionCost);
-        owner.IncreaseSexisme(sexismeCost);
+	[RPC]
+	protected override void useOnRPC(int viewID) {
 
-        if (t.TargetType == TargetType.Card)
-        {
-            Card c = (Card)t;
-            c.ReduceReputation(attack);
+		Target t = PhotonView.Find(viewID).GetComponent<Target>();
+
+		owner.IncreaseCorruption(corruptionCost);
+		owner.IncreaseSexisme(sexismeCost);
+
+		if (t.TargetType == TargetType.Card) {
+			Card c = (Card)t;
+			c.ReduceReputation(attack);
 			effect.OnActionPerformed(t);
-        }
-        else
-        {
-            Player p = (Player)t;
-            p.ReduceReputation(attack);
+		} else {
+			Player p = (Player)t;
+			p.ReduceReputation(attack);
 			effect.OnActionPerformed(t);
-        }
+		}
 
-        destroy();
+		destroy();
+	}
 
-        Debug.Log(fullName + " used on " + t.fullName);
-    }
 }
