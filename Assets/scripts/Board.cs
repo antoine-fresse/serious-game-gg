@@ -7,7 +7,7 @@ public class Board : Target {
 
 	protected override void init() {
 		base.init();
-		type = Type.Board;
+		//TargetType = TargetType.Board;
 	}
 
 }

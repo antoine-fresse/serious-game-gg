@@ -1,19 +1,26 @@
+using DG.Tweening;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Collections;
 
-public enum Type {
+public enum TargetType {
     Player,
     Card,
-    Board
+    Board,
+	Context
 }
 [RequireComponent(typeof(Selectable))]
 public abstract class Target : MonoBehaviour {
 
-    public Type type;
+    public TargetType TargetType;
     public string fullName;
     public Selectable selectable;
+	public PhotonView photonView;
 
+	public void Awake() {
+		photonView = GetComponent<PhotonView>();
+	}
     public void Start()
     {
         init();
@@ -23,8 +30,14 @@ public abstract class Target : MonoBehaviour {
 		selectable = GetComponent<Selectable>();
 	}
 
-    void OnMouseUp()
+    public void OnClick()
     {
 		GameManager.instance.elementClicked(this);
     }
+
+	public void Shake() {
+		transform.DOShakePosition(0.5f, 15f);
+	}
+
+	
 }

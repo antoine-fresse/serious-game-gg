@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using DG.Tweening;
 
 public class GameManager : MonoBehaviour {
 
@@ -13,44 +14,61 @@ public class GameManager : MonoBehaviour {
 
     public CardContext contextCard;
 
+	public RectTransform contextRect;
+
     public RectTransform yourTurnText;
-    public int turn = 2;
+
+	public Player localPlayer;
+
+	public bool localPlayerTurn = true;
+
+	public bool offlineMode = false;
 
 	// Use this for initialization
 	void Awake () {
         instance = this;
+		Player.cardWidth = 110;
+		PhotonNetwork.offlineMode = offlineMode;
+		localPlayer = PhotonNetwork.isMasterClient ? player1 : player2;
+		localPlayerTurn = localPlayer == player1;
 	}
 
     void Update() {
+	    if (contextCard) {
+			contextCard.transform.SetParent(contextRect);
+		    contextCard.transform.localPosition = Vector3.zero;
+	    }
     }
 
     public void playerDied(Player deadPlayer){
         
     }
 
-    public void endTurn()
+    public void EndTurn()
     {
 		
 		activePlayer().OnTurnEnd();
 
-        turn = turn == 1 ? 2 : 1;
+	    localPlayerTurn = !localPlayerTurn;
 
 		if (cardSelected) {
 			cardSelected.setSelected(false);
 			cardSelected = null;
 		}
-        if (turn == 1)
-        {
-            LeanTween.move(yourTurnText, new Vector3(0f, 0f, 0f), 1f);
-            LeanTween.move(yourTurnText, new Vector3(0f, (float)Screen.height, 0f), 0.01f).setDelay(2f);
-        }
-
+		if (localPlayerTurn) {
+		    DOTween.Sequence()
+			    .Append(yourTurnText.DOMove(new Vector3(0f, 0f, 0f), 1.0f).SetEase(Ease.OutBounce))
+			    .AppendInterval(1.0f)
+			    .Append(yourTurnText.DOMove(new Vector3(0f, (float) Screen.height*2f, 0f), 0f));
+	    }
         activePlayer().OnTurnStart();
+		/*if(localPlayerTurn)
+			activePlayer().ResetOutlines(true);*/
     }
 
     public Player activePlayer()
     {
-        return turn == 1 ? player1 : player2;
+		return localPlayerTurn ? player1 : player2;
     }
 
     public Player getOtherPlayer(Player p){
@@ -59,57 +77,72 @@ public class GameManager : MonoBehaviour {
 
     public void elementClicked(Target c){
 
-        // If not our turn skip
-        if (turn != 1)
+		if (!localPlayerTurn && !offlineMode)
             return;
 
-        if (cardSelected == null && c.type == Type.Card) {
+        if (cardSelected == null && c.TargetType == TargetType.Card) {
             Card ca = (Card)c;
-            if (ca.owner == player1)
-            {
-				if (ca.cardType == CardType.Actor)
+            if (ca.owner == activePlayer() && ca != contextCard){
+				if (ca.cardType == CardType.Actor && ca.place == Place.Board)
 					if (!((CardActor)ca).canAttack)
 						return;
 
                 cardSelected = ca;
                 cardSelected.setSelected(true);
+				activePlayer().OutlinePossibleTargets(cardSelected);
             }
         }
         else if (cardSelected != null) { // A card is selected
             if (cardSelected == c) {
                 cardSelected.setSelected(false);
                 cardSelected = null;
+				activePlayer().ResetOutlines(true);
             }
             else {
-
                 bool result = false;
-                if (c.type == Type.Card) {
-                    Card ca = (Card)c;
-                    if (ca.place == Place.Board) {
-                        result = cardSelected.isValidTarget(c);
-                    }
-                    else if(ca.owner == player1) {
-                        cardSelected.setSelected(false);
-                        cardSelected = (Card)c;
-                        cardSelected.setSelected(true);
-                        return;
-                    }
-                }
-                else if(c.type == Type.Player){
-                    result = cardSelected.isValidTarget(c);
-				} else { // Board
-					if (cardSelected.place == Place.Hand && cardSelected.cardType == CardType.Actor) {
-						cardSelected.owner.moveToBoard(cardSelected);
-						cardSelected.setSelected(false);
-						cardSelected = null;
+                switch (c.TargetType) {
+	                case TargetType.Card: {
+		                Card ca = (Card)c;
+		                if (ca.place == Place.Board) {
+			                result = cardSelected.isValidTarget(c);
+		                } else if (ca.owner == activePlayer() && ca != contextCard) {
+			                cardSelected.setSelected(false);
+			                cardSelected = (Card)c;
+			                cardSelected.setSelected(true);
+			                activePlayer().OutlinePossibleTargets(cardSelected);
+			                return;
+		                }
+	                }
+		                break;
+	                case TargetType.Player:
+		                result = cardSelected.isValidTarget(c);
+		                break;
+	                case TargetType.Board:
+		                if (cardSelected.place == Place.Hand && cardSelected.cardType == CardType.Actor) {
+			                cardSelected.owner.MoveToBoard(cardSelected);
+			                cardSelected.setSelected(false);
+			                cardSelected = null;
+			                activePlayer().ResetOutlines(true);
+		                }
+		                break;
+					case TargetType.Context: {
+						if (cardSelected.cardType == CardType.Context) {
+							contextCard = (CardContext)cardSelected;
+							cardSelected.owner.RemoveCard(cardSelected);
+							
+							cardSelected.setSelected(false);
+							cardSelected = null;
+							activePlayer().ResetOutlines(true);
+						}
 					}
-				}
-                
-                Debug.Log(result);
+		                break;
+                }
+				// If we have a valid target, we use the card
                 if (result) {
                     cardSelected.useOn(c);
                     cardSelected.setSelected(false);
                     cardSelected = null;
+					player1.ResetOutlines(true);
                 }
             }
         }

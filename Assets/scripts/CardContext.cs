@@ -17,12 +17,11 @@ public class CardContext : Card {
     }
 
     public override bool isValidTarget(Target t) {
-        return false;
+	    if (t.TargetType == TargetType.Context)
+		    return true;
+
+	    return false;
     }
-
-
-    
-
 
 
 }

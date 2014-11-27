@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Text.RegularExpressions;
 using System.Collections;
+using DG.Tweening;
 
 public enum CardType
 {
@@ -16,13 +18,24 @@ public enum Place {
     Graveyard
 }
 
+public enum PlayerID {
+	Player1,
+	Player2
+}
+
 [RequireComponent(typeof(CardEffectInterface))]
 public abstract class Card : Target {
 
     public string description;
+	public Text cardName;
+	public Text cardDesc;
+	public Text cardCost;
 
     public int attack = 1;
     public int reputation = 1;
+
+	public int baseAttack = 1;
+	public int baseReputation = 1;
 
     public int corruptionCost = 0;
     public int sexismeCost = 0;
@@ -32,9 +45,16 @@ public abstract class Card : Target {
     public Sprite spriteHidden;
 
     public bool hidden = false;
-    public Player owner;
 
-    public Place place = Place.Deck;
+	public PlayerID ownerID;
+
+	
+
+	public Player owner {
+		get { return ownerID == PlayerID.Player1 ? GameManager.instance.player1 : GameManager.instance.player2; }
+	}
+
+	public Place place = Place.Deck;
     public CardType cardType = CardType.Action;
 
 
@@ -42,10 +62,11 @@ public abstract class Card : Target {
 
     public abstract void useOn(Target c);
     public abstract bool isValidTarget(Target c);
-    public void reduceReputation(int value) {
+    public void ReduceReputation(int value) {
         reputation -= value;
+		Shake();
         if (reputation <= 0) {
-            Debug.Log("Card is ded yo ");
+			destroy();
         }
     }
 
@@ -55,8 +76,44 @@ public abstract class Card : Target {
 
     protected override void init()
     {
-		base.init();
-        type = Type.Card;
+		base.init();	    
+        TargetType = TargetType.Card;
+
+		cardName.text = fullName;
+
+	    cardDesc.text = Regex.Replace(description, "%ATTACK%", attack.ToString(), RegexOptions.IgnoreCase);
+
+		switch (place) {
+			case Place.Board:
+				if (!owner.board.Contains(this)) {
+					owner.board.Add(this);
+				}
+
+				break;
+			case Place.Deck:
+				if (!owner.deck.Contains(this)) {
+					owner.deck.Add(this);
+				}
+
+
+				break;
+			case Place.Hand:
+				if (!owner.hand.Contains(this)) {
+					owner.hand.Add(this);
+				}
+				break;
+		}
+
+	    var costText = "";
+
+	    if (corruptionCost > 0)
+		    costText += "<color=maroon>" + corruptionCost + "C</color>";
+		if (sexismeCost > 0)
+			costText += "<color=#0080ffff>" + sexismeCost + "S</color>";
+
+	    cardCost.text = costText;
+
+
 		effect = GetComponent<CardEffectInterface>();
 		effect.OnInit();
     }
@@ -66,11 +123,13 @@ public abstract class Card : Target {
         if (isSelected)
         {
             gameObject.GetComponent<Image>().sprite = spriteSelected;
+	        transform.DOScale(new Vector3(1.2f, 1.2f,1f), 0.2f);
 			effect.OnSelected();
         }
         else
         {
             gameObject.GetComponent<Image>().sprite = spriteNormal;
+			transform.DOScale(new Vector3(1.0f, 1.0f, 1f), 0.2f);
 			effect.OnDeselected();
         }
     }
@@ -101,9 +160,17 @@ public abstract class Card : Target {
 		if (place == Place.Board) {
 			effect.OnDeath();
 		}
-        owner.removeCard(this);
+        owner.RemoveCard(this);
         place = Place.Graveyard;
-        gameObject.transform.position = new Vector3(0, 10000, 0);
+
+
+		transform.SetParent(GameObject.Find("Cards").transform);
+	    DOTween.Sequence()
+		    .Append(transform.DOScale(new Vector3(0.0f, 0.0f, 0.0f), 1.0f))
+			.Append(transform.DOMove(new Vector3(10000f,0f), 0f));
+
+
+
     }
 }
 

@@ -8,32 +8,14 @@ public class CardAction : Card {
     public bool canTargetAllies = false;
 
 
-	public Text cardName;
-	public Text cardDesc;
-	public Text cardCost;
-
     protected override void init(){
         base.init();
         cardType = CardType.Action;
 
-		cardName.text = fullName;
-
-		cardDesc.text = description;
-		string cost = "";
-		if (corruptionCost > 0 || sexismeCost > 0) {
-			cost += "Cout : ";
-			if (corruptionCost > 0)
-				cost += corruptionCost + " corruption";
-			if (sexismeCost > 0)
-				cost += sexismeCost + " sexisme";
-		}
-
-		cardCost.text = cost;
-
     }
 
     public override bool isValidTarget(Target t) {
-        if (t.type == Type.Player) {
+        if (t.TargetType == TargetType.Player) {
             if (!canTargetPlayers)
                 return false;
 
@@ -50,19 +32,19 @@ public class CardAction : Card {
     }
 
     public override void useOn(Target t) {
-        owner.increaseCorruption(corruptionCost);
-        owner.increaseSexisme(sexismeCost);
+        owner.IncreaseCorruption(corruptionCost);
+        owner.IncreaseSexisme(sexismeCost);
 
-        if (t.type == Type.Card)
+        if (t.TargetType == TargetType.Card)
         {
             Card c = (Card)t;
-            c.reduceReputation(attack);
+            c.ReduceReputation(attack);
 			effect.OnActionPerformed(t);
         }
         else
         {
             Player p = (Player)t;
-            p.reduceReputation(attack);
+            p.ReduceReputation(attack);
 			effect.OnActionPerformed(t);
         }
 

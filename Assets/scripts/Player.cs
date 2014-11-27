@@ -7,6 +7,7 @@ public class Player : Target {
 
     public RectTransform handPos;
     public RectTransform boardPos;
+	public RectTransform deckPos;
 
     public int maxCardsInHand = 6;
     public int reputation = 30;
@@ -17,40 +18,46 @@ public class Player : Target {
     public List<Card> hand;
     public List<Card> board;
 
-    public int cardWidth = 200;
+	public Board boardUI;
 
+	public static int cardWidth = 110;
 	// Use this for initialization
 
     protected override void init(){
 		base.init();
-        type = Type.Player;
+        TargetType = TargetType.Player;
     }
 
 
     public void OnTurnStart()
     {
-        draw();
+        Draw();
+		
         foreach(Card c in board){
-            c.selectable.interactable = true;
+            //c.selectable.interactable = true;
 			c.OnTurnStart();
         }
         foreach (Card c in hand){
-            c.selectable.interactable = true;
+           // c.selectable.interactable = true;
         }
+		ResetOutlines(GameManager.instance.offlineMode || GameManager.instance.localPlayerTurn);
+	    //boardUI.selectable.interactable = true;
     }
 
     public void OnTurnEnd()
     {
+		ResetOutlines(false);
         foreach (Card c in board){
-            c.selectable.interactable = false;
+            //c.selectable.interactable = false;
 			c.OnTurnEnd();
         }
         foreach (Card c in hand){
-            c.selectable.interactable = false;
+            //c.selectable.interactable = false;
         }
+		//boardUI.selectable.interactable = false;
     }
 
-	public void moveToBoard(Card c) {
+	public void MoveToBoard(Card c) {
 		if (!hand.Contains(c))
 			return;
 
@@ -60,12 +67,12 @@ public class Player : Target {
 		c.effect.OnPlacedOnBoard();
 	}
 
-    public void draw(int times = 1) {
+    public void Draw(int times = 1) {
         if (times < 1) {
             return;
         }
         if (deck.Count == 0)
-            reduceReputation(times);
+            ReduceReputation(times);
         else{
             if (hand.Count < maxCardsInHand) {
                 Card d = deck[0];
@@ -74,52 +81,139 @@ public class Player : Target {
                 hand.Add(d);
                 d.place = Place.Hand;
 				d.effect.OnDraw();
-                draw(times - 1);
+                Draw(times - 1);
             }
         }
     }
     void Update() {
-        displayDeck();
-        displayHand();
-        displayBoard();
+        DisplayDeck();
+        DisplayHand();
+        DisplayBoard();
     }
 
-    public void displayDeck()
+	public void OutlinePossibleTargets(Card c) {
+
+		Player p2 = GameManager.instance.getOtherPlayer(this);
+
+		Outline outline;
+		Color col;
+		foreach (var card in board) {
+			outline = card.GetComponent<Outline>();
+			col = outline.effectColor;
+			col.a = c.isValidTarget(card) ? 255 : 0;
+			outline.effectColor = col;
+		}
+		foreach (var card in p2.board) {
+			outline = card.GetComponent<Outline>();
+			col = outline.effectColor;
+			col.a = c.isValidTarget(card) ? 255 : 0;
+			outline.effectColor = col;
+		}
+		foreach (var card in hand) {
+			outline = card.GetComponent<Outline>();
+			col = outline.effectColor;
+			col.a = 0;
+			outline.effectColor = col;
+		}
+		
+
+		
+		outline = GetComponent<Outline>();
+		col = outline.effectColor;
+		col.a = c.isValidTarget(this) ? 255 : 0;
+		outline.effectColor = col;
+		
+		outline = p2.GetComponent<Outline>();
+		col = outline.effectColor;
+		col.a = c.isValidTarget(p2) ? 255 : 0;
+		outline.effectColor = col;
+
+	}
+
+	public void ResetOutlines(bool outlinePossibilities) {
+		Player p2 = GameManager.instance.getOtherPlayer(this);
+
+		Outline outline;
+		Color col;
+		foreach (var card in board) {
+			outline = card.GetComponent<Outline>();
+			col = outline.effectColor;
+			col.a = ((CardActor) card).canAttack && outlinePossibilities ? 255 : 0;
+			outline.effectColor = col;
+		}
+		foreach (var card in p2.board) {
+			outline = card.GetComponent<Outline>();
+			col = outline.effectColor;
+			col.a = 0;
+			outline.effectColor = col;
+		}
+		foreach (var card in hand) {
+			outline = card.GetComponent<Outline>();
+			col = outline.effectColor;
+			col.a = outlinePossibilities ? 255:0;
+			outline.effectColor = col;
+		}
+		
+
+		outline = GetComponent<Outline>();
+		col = outline.effectColor;
+		col.a = 0;
+		outline.effectColor = col;
+
+		outline = p2.GetComponent<Outline>();
+		col = outline.effectColor;
+		col.a = 0;
+		outline.effectColor = col;
+	}
+
+    public void DisplayDeck()
     {
         foreach (var card in deck)
         {
-            card.transform.position = new Vector3(10000, 0, 0);
+			card.transform.SetParent(deckPos);
+            card.transform.localPosition = new Vector3(0, 0, 0);
             card.hide();
         }
     }
 
-    public void displayHand() {
-        Vector3 pos = handPos.position + new Vector3(-cardWidth * hand.Count / 2, 0, 0);
+    public void DisplayHand() {
+        Vector3 pos = /*handPos.position +*/ new Vector3(-cardWidth * hand.Count / 2, 0, 0);
         var offset = new Vector3(cardWidth, 0, 0);
         foreach (var card in hand) {
-            card.transform.position = pos;
+			card.transform.localPosition = pos;
+	        card.transform.SetParent(handPos);
             pos += offset;
 
-            if (this == GameManager.instance.player2)
-            {
-                card.hide();
-            }
+	        if (GameManager.instance.offlineMode) {
+		        if (GameManager.instance.activePlayer() == this)
+					card.show();
+				else
+			        card.hide();
+	        }else{
+		        if (GameManager.instance.localPlayer == this) 
+					card.show();
+		        else {
+					card.hide();
+		        }
+		        
+	        }
         }
     }
 
-    public void displayBoard() {
-        Vector3 pos = boardPos.position + new Vector3(-cardWidth * board.Count / 2, 0, 0);
+    public void DisplayBoard() {
+        Vector3 pos = /*boardPos.position +*/ new Vector3(-cardWidth * board.Count / 2, 0, 0);
         var offset = new Vector3(cardWidth, 0, 0);
         foreach (var card in board) {
-            card.transform.position = pos;
+			card.transform.SetParent(GameObject.Find("Cards").transform);
+            card.transform.position = boardPos.position + pos;
             pos += offset;
         }
     }
 
-    public void reduceReputation(int value)
+    public void ReduceReputation(int value)
     {
         reputation -= value;
-
+		Shake();
         if (reputation <= 0)
         {
             GameManager.instance.playerDied(this);
@@ -135,25 +229,25 @@ public class Player : Target {
         return deck.Contains(c);
     }
 
-    public void shuffleDeck() {
+    public void ShuffleDeck() {
         // TODO SHUFFLE DECK
     }
 
 
-    public void increaseCorruption(int cost) {
+    public void IncreaseCorruption(int cost) {
         if (GameManager.instance.contextCard) {
             cost *= (int)GameManager.instance.contextCard.corruptionMultiplier;
         }
         corruption += cost;
     }
-    public void increaseSexisme(int cost) {
+    public void IncreaseSexisme(int cost) {
         if (GameManager.instance.contextCard) {
             cost *= (int)GameManager.instance.contextCard.sexismeMultiplier;
         }
         sexisme += cost;
     }
 
-    public void removeCard(Card c)
+    public void RemoveCard(Card c)
     {
         if (hand.Contains(c))
             hand.Remove(c);
