@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
@@ -48,14 +50,19 @@ public class GameManager : MonoBehaviour {
 
 	void Start() {
 		if (PhotonNetwork.isMasterClient) {
+            CardFactory.Instance.CreateActor(ActorDB.rowIds.ACTOR_ADAMBALDWIN, PlayerID.Player1);
 			CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_KICKSTARTER, PlayerID.Player1);
 			CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_GAMERSAREDEAD, PlayerID.Player1);
 		}
 	    if (!offlineMode) return;
 
+        CardFactory.Instance.CreateActor(ActorDB.rowIds.ACTOR_ANITASARKEESIAN, PlayerID.Player2);
 		CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_CONFESSION, PlayerID.Player2);
 		CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_REMISEDEPRIX, PlayerID.Player2);
-		
+
+        foreach (ActorDB.rowIds actor in Enum.GetValues(typeof(ActorDB.rowIds))){
+            CardFactory.Instance.CreateActor(actor, PlayerID.Player2);
+	    }
 	}
 
     void Update() {

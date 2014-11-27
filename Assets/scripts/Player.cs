@@ -208,12 +208,12 @@ public class Player : Target {
     }
 
     public void DisplayBoard() {
-        Vector3 pos = /*boardPos.position +*/ new Vector3(-cardWidth * board.Count / 2, 0, 0);
+        Vector3 pos = boardPos.position + new Vector3(-cardWidth * board.Count / 2, 0, 0);
         var offset = new Vector3(cardWidth, 0, 0);
         foreach (var card in board) {
 			card.transform.SetParent(GameObject.Find("Cards").transform);
-            card.transform.position = boardPos.position + pos;
-            pos += offset;
+            card.transform.position = pos;
+            pos += 2*offset;
 			card.show();
         }
     }

@@ -24,4 +24,5 @@ MonoBehaviour:
   - MoveToBoardRPC
   - SetContext
   - useOnRPC
+  - CreateActorRPC
   DisableAutoOpenWizard: 0
