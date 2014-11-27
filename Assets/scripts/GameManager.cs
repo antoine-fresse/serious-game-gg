@@ -35,6 +35,10 @@ public class GameManager : MonoBehaviour {
 		photonView = GetComponent<PhotonView>();
 		Player.cardWidth = 110;
 		PhotonNetwork.offlineMode = offlineMode;
+	    if (offlineMode) {
+	        //PhotonNetwork.JoinLobby();
+	        PhotonNetwork.JoinOrCreateRoom("localRoom", new RoomOptions {maxPlayers = 2}, TypedLobby.Default);
+	    }
 		localPlayer = PhotonNetwork.isMasterClient ? player1 : player2;
 		localPlayerTurn = localPlayer == player1;
 
@@ -47,10 +51,11 @@ public class GameManager : MonoBehaviour {
 			CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_KICKSTARTER, PlayerID.Player1);
 			CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_GAMERSAREDEAD, PlayerID.Player1);
 		}
-		else {
-			CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_CONFESSION, PlayerID.Player2);
-			CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_REMISEDEPRIX, PlayerID.Player2);
-		}
+	    if (!offlineMode) return;
+
+		CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_CONFESSION, PlayerID.Player2);
+		CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_REMISEDEPRIX, PlayerID.Player2);
+		
 	}
 
     void Update() {
@@ -93,7 +98,7 @@ public class GameManager : MonoBehaviour {
 			buttonEndTurn.interactable = true;
 		}
 		else 
-			buttonEndTurn.interactable = false;
+			buttonEndTurn.interactable = offlineMode;
 		
         activePlayer().OnTurnStart();
     }

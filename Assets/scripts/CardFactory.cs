@@ -23,7 +23,6 @@ public class CardFactory : MonoBehaviour {
 
 
 	public void CreateAction(ActionDB.rowIds type, PlayerID playerId) {
-
 		photonView.RPC("CreateActionRPC", PhotonTargets.AllBuffered, _actionDB.rowNames[(int)type], (int)playerId, PhotonNetwork.AllocateViewID());
 	}
 
@@ -36,7 +35,7 @@ public class CardFactory : MonoBehaviour {
 		var playerId = (PlayerID) id;
 		var row = _actionDB.GetRow(type);
 
-		CardAction action = (Instantiate(prefabAction, Vector3.zero, Quaternion.identity) as GameObject).GetComponent<CardAction>();
+		var action = (Instantiate(prefabAction, Vector3.zero, Quaternion.identity) as GameObject).GetComponent<CardAction>();
 
 		action.GetComponent<PhotonView>().viewID = viewId;
 

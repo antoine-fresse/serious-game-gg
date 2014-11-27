@@ -29,7 +29,7 @@ public class NetworkManager : MonoBehaviour {
 		_textUI.text = "Game server : <color=orange>Connecting</color>";
 
 		if(PlayerPrefs.HasKey("pseudo")) {
-			Pseudo.text = PlayerPrefs.GetString("pseudo");
+			Pseudo.text.text = PlayerPrefs.GetString("pseudo");
 		}
 
 		_p1 = PanelRoom.transform.FindChild("Player1").GetComponent<Text>();
@@ -65,11 +65,12 @@ public class NetworkManager : MonoBehaviour {
 	}
 
 	public void SavePseudo() {
-		if (Pseudo.text == "") {
-			Pseudo.text = "Anonymous";
+        if (Pseudo.text.text == "")
+        {
+            Pseudo.text.text = "Anonymous";
 		}
-		PlayerPrefs.SetString("pseudo", Pseudo.text);
-		PhotonNetwork.playerName = Pseudo.text;
+        PlayerPrefs.SetString("pseudo", Pseudo.text.text);
+        PhotonNetwork.playerName = Pseudo.text.text;
 	}
 
 	public void OnButtonClick() {
@@ -103,7 +104,7 @@ public class NetworkManager : MonoBehaviour {
 
 
 	void OnJoinedRoom() {
-		PhotonNetwork.playerName = Pseudo.text;
+        PhotonNetwork.playerName = Pseudo.text.text;
 		Pseudo.interactable = false;
 		ButtonRoom.interactable = true;
 		ButtonRoom.GetComponentInChildren<Text>().text = "Leave room";
