@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
@@ -74,6 +75,11 @@ public class Player : Target {
 		c.effect.OnPlacedOnBoard();
 	}
 
+	public void DrawRPC(int times = 1) {
+		photonView.RPC("Draw", PhotonTargets.AllBuffered, times);
+	}
+
+	[RPC]
     public void Draw(int times = 1) {
         if (times < 1) {
             return;
@@ -122,8 +128,12 @@ public class Player : Target {
 			col.a = 0;
 			outline.effectColor = col;
 		}
-		
 
+
+		outline = GameObject.Find("Context").GetComponent<Outline>();
+		col = outline.effectColor;
+		col.a = c.cardType == CardType.Context ? 255 : 0;
+		outline.effectColor = col;
 		
 		outline = GetComponent<Outline>();
 		col = outline.effectColor;
@@ -160,6 +170,11 @@ public class Player : Target {
 			col.a = outlinePossibilities ? 255:0;
 			outline.effectColor = col;
 		}
+
+		outline = GameObject.Find("Context").GetComponent<Outline>();
+		col = outline.effectColor;
+		col.a = 0;
+		outline.effectColor = col;
 		
 
 		outline = GetComponent<Outline>();

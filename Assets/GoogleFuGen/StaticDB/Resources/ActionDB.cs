@@ -216,7 +216,7 @@ namespace GoogleFu
 														"0",
 														"0",
 														"DefaultEffect",
-														"Reduit la r\u00e9putation de l'adversaire oue la carte cibl\u00e9e de X",
+														"Reduit la r\u00e9putation de l'adversaire ou la carte cibl\u00e9e de X",
 														"2",
 														"11",
 														"FALSE",

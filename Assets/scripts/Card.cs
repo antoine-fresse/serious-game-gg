@@ -118,12 +118,9 @@ public abstract class Card : Target {
 				break;
 		}
 
-	    var costText = "";
-
-	    if (corruptionCost > 0)
-		    costText += "<color=maroon>" + corruptionCost + "C</color>";
-		if (sexismeCost > 0)
-			costText += "<color=#0080ffff>" + sexismeCost + "S</color>";
+	    var costText = "<color=maroon>" + corruptionCost + "</color>";
+	    costText += "\n";
+		costText += "<color=#0080ffff>" + sexismeCost + "</color>";
 
 	    cardCost.text = costText;
 

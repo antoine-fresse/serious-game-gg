@@ -20,9 +20,11 @@ MonoBehaviour:
   PingCloudServersOnAwake: 0
   RpcList:
   - CreateActionRPC
+  - CreateActorRPC
+  - CreateContextRPC
+  - Draw
   - EndTurnRPC
   - MoveToBoardRPC
   - SetContext
   - useOnRPC
-  - CreateActorRPC
   DisableAutoOpenWizard: 0

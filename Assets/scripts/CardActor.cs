@@ -27,7 +27,7 @@ public class CardActor : Card {
 		reputationText += reputation;
 		reputationText += reputation < baseReputation ? "</color>" : "";
 
-		cardStats.text = attackText + "/" + reputationText;
+		cardStats.text = attackText + "   " + reputationText;
 	}
 
 	[RPC]

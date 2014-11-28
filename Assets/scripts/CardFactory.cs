@@ -12,6 +12,7 @@ public class CardFactory : MonoBehaviour {
 	public static CardFactory Instance;
 	private ActionDB _actionDB;
     private ActorDB _actorDB;
+	private TrendingDB _trendingDB;
 
 	public PhotonView photonView;
 	// Use this for initialization
@@ -19,8 +20,10 @@ public class CardFactory : MonoBehaviour {
 		photonView = GetComponent<PhotonView>();
 		_actionDB = ActionDB.Instance;
 	    _actorDB = ActorDB.Instance;
+		_trendingDB = TrendingDB.Instance;
+
 		Instance = this;
-		
+		Debug.Log("DB ready");
 	}
 
 	public void CreateAction(ActionDB.rowIds type, PlayerID playerId) {
@@ -90,6 +93,41 @@ public class CardFactory : MonoBehaviour {
         actor.baseAttack = row._ATTACK;
         actor.baseReputation = row._REPUTATION;
     }
+
+
+
+	public void CreateContext(TrendingDB.rowIds type, PlayerID playerId) {
+		photonView.RPC("CreateContextRPC", PhotonTargets.AllBuffered, _trendingDB.rowNames[(int)type], (int)playerId, PhotonNetwork.AllocateViewID());
+	}
+
+	public void CreateContext(string type, PlayerID playerId) {
+		photonView.RPC("CreateContextRPC", PhotonTargets.AllBuffered, type, (int)playerId, PhotonNetwork.AllocateViewID());
+	}
+
+	[RPC]
+	private void CreateContextRPC(string type, int id, int viewId) {
+		var playerId = (PlayerID)id;
+		var row = _trendingDB.GetRow(type);
+
+		var context = (Instantiate(prefabContext, Vector3.zero, Quaternion.identity) as GameObject).GetComponent<CardContext>();
+
+		context.GetComponent<PhotonView>().viewID = viewId;
+
+		context.transform.SetParent(GameObject.Find("Cards").transform);
+		context.transform.localScale = new Vector3(1f, 1f, 1f);
+
+		context.fullName = row._NAME;
+		context.effectDesc = row._CARDEFFECTDESC;
+		context.ownerID = playerId;
+		context.description = row._DESC;
+		context.corruptionCost = 0;//row._CORRUPTIONCOST;
+		context.sexismeCost = 0;//row._SEXISMECOST;
+		context.gameObject.AddComponent(row._CARDEFFECT);
+		context.baseAttack = 0;//row._ATTACK;
+		context.baseReputation = 1;//row._REPUTATION;
+		context.corruptionMultiplier = row._CORRUPTIONMULT;
+		context.sexismeMultiplier = row._SEXISMEMULT;
+	}
 
 
 }

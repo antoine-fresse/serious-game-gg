@@ -30,6 +30,9 @@ public class GameManager : MonoBehaviour {
 
 	public Button buttonEndTurn;
 
+	public Text startGameText;
+
+
 
 	// Use this for initialization
 	void Awake () {
@@ -44,25 +47,66 @@ public class GameManager : MonoBehaviour {
 		localPlayer = PhotonNetwork.isMasterClient ? player1 : player2;
 		localPlayerTurn = localPlayer == player1;
 
-		buttonEndTurn.interactable = localPlayerTurn;
+		buttonEndTurn.interactable = false;
 
+		
+		
 	}
 
 	void Start() {
-		if (PhotonNetwork.isMasterClient) {
-            CardFactory.Instance.CreateActor(ActorDB.rowIds.ACTOR_ADAMBALDWIN, PlayerID.Player1);
+		StartCoroutine(StartGame());
+	}
+
+	void InstantiateDecks() {
+
+		// TODO
+
+		if (localPlayer == player1) {
+			CardFactory.Instance.CreateActor(ActorDB.rowIds.ACTOR_ADAMBALDWIN, PlayerID.Player1);
 			CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_KICKSTARTER, PlayerID.Player1);
 			CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_GAMERSAREDEAD, PlayerID.Player1);
 		}
-	    if (!offlineMode) return;
+		else {
+			CardFactory.Instance.CreateActor(ActorDB.rowIds.ACTOR_ANITASARKEESIAN, PlayerID.Player2);
+			CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_CONFESSION, PlayerID.Player2);
+			CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_REMISEDEPRIX, PlayerID.Player2);
 
-        CardFactory.Instance.CreateActor(ActorDB.rowIds.ACTOR_ANITASARKEESIAN, PlayerID.Player2);
-		CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_CONFESSION, PlayerID.Player2);
-		CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_REMISEDEPRIX, PlayerID.Player2);
+			foreach (TrendingDB.rowIds c in Enum.GetValues(typeof(TrendingDB.rowIds))) {
+				CardFactory.Instance.CreateContext(c, PlayerID.Player2);
+			}
+		}		
 
-        foreach (ActorDB.rowIds actor in Enum.GetValues(typeof(ActorDB.rowIds))){
-            CardFactory.Instance.CreateActor(actor, PlayerID.Player2);
-	    }
+	}
+	IEnumerator StartGame() {
+
+		if(!offlineMode) 
+			startGameText.text = PhotonNetwork.playerList[0].name + " vs " + PhotonNetwork.playerList[1].name;
+
+		startGameText.transform.DOLocalMove(Vector3.zero, 2f).SetEase(Ease.OutElastic);
+
+		InstantiateDecks();
+
+		yield return new WaitForSeconds(3f);
+
+		startGameText.transform.DOLocalMove(new Vector3(1920,0,0), 1f).SetEase(Ease.InCirc);
+		
+
+		if (PhotonNetwork.isMasterClient) {
+			activePlayer().DrawRPC(2);
+			getOtherPlayer(activePlayer()).DrawRPC(3);
+		}
+
+		yield return new WaitForSeconds(1f);
+
+		if (localPlayerTurn) {
+			DOTween.Sequence()
+				.Append(yourTurnText.DOMove(new Vector3(0f, 0f, 0f), 1.0f).SetEase(Ease.OutBounce))
+				.AppendInterval(1.0f)
+				.Append(yourTurnText.DOMove(new Vector3(0f, (float)Screen.height * 2f, 0f), 0f));
+			buttonEndTurn.interactable = true;
+		}
+
+		activePlayer().OnTurnStart();
 	}
 
     void Update() {
@@ -78,9 +122,16 @@ public class GameManager : MonoBehaviour {
 
 	[RPC]
 	void SetContext(int viewID) {
+
+		if (contextCard) {
+			contextCard.destroy();
+		}
+
 		contextCard = PhotonView.Find(viewID).GetComponent<CardContext>();
 		contextCard.owner.RemoveCard(contextCard);
 		contextCard.show();
+
+		contextCard.TargetType = TargetType.Context;
 	}
 
 	public void EndTurn() {
@@ -145,7 +196,7 @@ public class GameManager : MonoBehaviour {
             else {
                 bool result = false;
                 switch (c.TargetType) {
-	                case TargetType.Card: {
+	                case TargetType.Card: { // We clicked on another card
 		                Card ca = (Card)c;
 		                if (ca.place == Place.Board) {
 			                result = cardSelected.isValidTarget(c);

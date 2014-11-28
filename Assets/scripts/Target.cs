@@ -20,10 +20,11 @@ public abstract class Target : MonoBehaviour {
 
 	public void Awake() {
 		photonView = GetComponent<PhotonView>();
+		
 	}
     public void Start()
     {
-        init();
+		init();
     }
 
 	protected virtual void init() {
