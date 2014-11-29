@@ -35,18 +35,9 @@ public class CardActor : Card {
 
 		Target c = PhotonView.Find(viewID).GetComponent<Target>();
 
-		if (c.TargetType == TargetType.Player) {
-			Player p = (Player)c;
-			p.ReduceReputation(attack);
-			effect.OnAttackPerformed(c);
+		effect.OnAttackPerformed(c);
 
-
-		} else {
-			Card ca = (Card)c;
-			ca.ReduceReputation(attack);
-			effect.OnAttackPerformed(c);
-			ca.effect.OnAttackReceived(this);
-		}
+		
 		var dir = (c.transform.position - transform.position) / 10f;
 		DOTween.Sequence()
 				.Append(transform.DOPunchPosition(dir, Mathf.Clamp(dir.sqrMagnitude / 100f, 0.5f, 1f), 0, 0));

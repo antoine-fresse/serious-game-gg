@@ -37,18 +37,13 @@ public class CardAction : Card {
 
 		Target t = PhotonView.Find(viewID).GetComponent<Target>();
 
+		show();
+
 		owner.IncreaseCorruption(corruptionCost);
 		owner.IncreaseSexisme(sexismeCost);
 
-		if (t.TargetType == TargetType.Card) {
-			Card c = (Card)t;
-			c.ReduceReputation(attack);
-			effect.OnActionPerformed(t);
-		} else {
-			Player p = (Player)t;
-			p.ReduceReputation(attack);
-			effect.OnActionPerformed(t);
-		}
+
+		effect.OnActionPerformed(t);
 
 		destroy();
 	}

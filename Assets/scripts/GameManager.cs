@@ -61,12 +61,12 @@ public class GameManager : MonoBehaviour {
 
 		// TODO
 
-		if (localPlayer == player1) {
+		if (localPlayer == player1 || offlineMode) {
 			CardFactory.Instance.CreateActor(ActorDB.rowIds.ACTOR_ADAMBALDWIN, PlayerID.Player1);
 			CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_KICKSTARTER, PlayerID.Player1);
 			CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_GAMERSAREDEAD, PlayerID.Player1);
 		}
-		else {
+		if(localPlayer == player2 || offlineMode){
 			CardFactory.Instance.CreateActor(ActorDB.rowIds.ACTOR_ANITASARKEESIAN, PlayerID.Player2);
 			CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_CONFESSION, PlayerID.Player2);
 			CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_REMISEDEPRIX, PlayerID.Player2);
@@ -235,7 +235,7 @@ public class GameManager : MonoBehaviour {
                     cardSelected.useOn(c);
                     cardSelected.setSelected(false);
                     cardSelected = null;
-					player1.ResetOutlines(true);
+					activePlayer().ResetOutlines(true);
                 }
             }
         }

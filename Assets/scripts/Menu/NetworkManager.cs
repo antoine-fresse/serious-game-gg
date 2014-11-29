@@ -67,7 +67,7 @@ public class NetworkManager : MonoBehaviour {
 	public void SavePseudo() {
         if (Pseudo.text == "")
         {
-            Pseudo.text = "Anonymous";
+            Pseudo.text = "Anonyme";
 		}
         PlayerPrefs.SetString("pseudo", Pseudo.text);
         PhotonNetwork.playerName = Pseudo.text;
@@ -95,7 +95,7 @@ public class NetworkManager : MonoBehaviour {
 	}
 
 	void OnLeftRoom() {
-		ButtonRoom.GetComponentInChildren<Text>().text = "Find random opponent";
+		ButtonRoom.GetComponentInChildren<Text>().text = "Trouver un adversaire";
 		ButtonRoom.interactable = true;
 		Pseudo.interactable = true;
 
@@ -107,12 +107,12 @@ public class NetworkManager : MonoBehaviour {
         PhotonNetwork.playerName = Pseudo.text;
 		Pseudo.interactable = false;
 		ButtonRoom.interactable = true;
-		ButtonRoom.GetComponentInChildren<Text>().text = "Leave room";
+		ButtonRoom.GetComponentInChildren<Text>().text = "Quitter";
 
 		PanelRoom.SetActive(true);
 		UpdateRoom();
 	}
-
+	
 	void UpdateRoom() {
 		var players = PhotonNetwork.playerList;
 
@@ -120,8 +120,8 @@ public class NetworkManager : MonoBehaviour {
 			_p1.text = PhotonNetwork.isMasterClient ? players[0].name : players[1].name;
 			_p2.text = PhotonNetwork.isMasterClient ? players[1].name : players[0].name;
 		} else {
-			_p1.text = PhotonNetwork.isMasterClient ? players[0].name : "Waiting for another player...";
-			_p2.text = PhotonNetwork.isMasterClient ? "Waiting for another player..." : players[0].name;
+			_p1.text = PhotonNetwork.isMasterClient ? players[0].name : "Attente d'un autre joueur...";
+			_p2.text = PhotonNetwork.isMasterClient ? "Attente d'un autre joueur..." : players[0].name;
 		}
 
 		_launchButton.interactable = PhotonNetwork.isMasterClient && players.Length == 2;

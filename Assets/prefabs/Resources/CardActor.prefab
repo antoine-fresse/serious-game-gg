@@ -235,7 +235,7 @@ MonoBehaviour:
   description: Some actor
   effectDesc: 
   cardName: {fileID: 11400006}
-  cardDesc: {fileID: 11400018}
+  cardDesc: {fileID: 11400000}
   cardCost: {fileID: 11400016}
   cardEffect: {fileID: 11400018}
   attack: 1
@@ -273,7 +273,7 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: .501960814, g: .501960814, b: .501960814, a: .501960814}
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: .272058845, g: .272058845, b: .272058845, a: .698039234}
     m_PressedColor: {r: .345098048, g: .345098048, b: .345098048, a: .698039234}
     m_DisabledColor: {r: .250980407, g: .250980407, b: .250980407, a: .501960814}
@@ -387,7 +387,7 @@ MonoBehaviour:
   m_Script: {fileID: -900027084, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_EffectColor: {r: .613793135, g: 1, b: 0, a: 0}
+  m_EffectColor: {r: .306896567, g: .5, b: 0, a: 0}
   m_EffectDistance: {x: 2, y: -2}
   m_UseGraphicAlpha: 1
 --- !u!114 &11400022

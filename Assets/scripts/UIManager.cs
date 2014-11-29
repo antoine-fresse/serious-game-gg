@@ -9,12 +9,14 @@ public class UIManager : MonoBehaviour {
     public Text textReputationJ2;
 
     public Slider sliderReputationJ1;
-    public Slider sliderCorruptionJ1;
-    public Slider sliderSexismeJ1;
+
+    public Text textCorruptionJ1;
+	public Text textSexismeJ1;
 
     public Slider sliderReputationJ2;
-    public Slider sliderCorruptionJ2;
-    public Slider sliderSexismeJ2;
+
+	public Text textCorruptionJ2;
+	public Text textSexismeJ2;
 
 
     private Player p1;
@@ -33,12 +35,12 @@ public class UIManager : MonoBehaviour {
         textReputationJ2.text = p2.reputation.ToString();
 
         sliderReputationJ1.value = p1.reputation;
-        sliderCorruptionJ1.value = p1.corruption;
-        sliderSexismeJ1.value = p1.sexisme;
+		textCorruptionJ1.text = p1.corruption.ToString("D");
+		textSexismeJ1.text = p1.sexisme.ToString("D");
 
         sliderReputationJ2.value = p2.reputation;
-        sliderCorruptionJ2.value = p2.corruption;
-        sliderSexismeJ2.value = p2.sexisme;
+		textCorruptionJ2.text = p2.corruption.ToString("D");
+		textSexismeJ2.text = p2.sexisme.ToString("D");
 
 
 	}
