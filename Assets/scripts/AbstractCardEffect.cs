@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public abstract class CardEffectInterface : MonoBehaviour {
+public abstract class AbstractCardEffect : MonoBehaviour {
 
 	public virtual void OnInit() { }
 	public virtual void OnDraw() { }

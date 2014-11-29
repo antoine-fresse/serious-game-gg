@@ -63,7 +63,7 @@ public abstract class Card : Target {
     public CardType cardType = CardType.Action;
 
 
-	public CardEffectInterface effect;
+	public AbstractCardEffect effect;
 
 	public void useOn(Target c) {
 		photonView.RPC("useOnRPC", PhotonTargets.AllBuffered, c.photonView.viewID);
@@ -125,7 +125,7 @@ public abstract class Card : Target {
 	    cardCost.text = costText;
 
 
-		effect = GetComponent<CardEffectInterface>();
+		effect = GetComponent<AbstractCardEffect>();
 		effect.OnInit();
     }
 
