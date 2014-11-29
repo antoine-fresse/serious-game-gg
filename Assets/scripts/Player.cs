@@ -10,8 +10,8 @@ public class Player : Target {
     public RectTransform boardPos;
 	public RectTransform deckPos;
 
-    public int maxCardsInHand = 6;
-    public int reputation = 30;
+	private const int MaxCardsInHand = 8;
+	public int reputation = 30;
     public int corruption = 0;
     public int sexisme = 0;
 
@@ -87,7 +87,7 @@ public class Player : Target {
         if (deck.Count == 0)
             ReduceReputation(times);
         else{
-            if (hand.Count < maxCardsInHand) {
+            if (hand.Count < MaxCardsInHand) {
                 Card d = deck[0];
                 deck.RemoveAt(0);
                 d.show();

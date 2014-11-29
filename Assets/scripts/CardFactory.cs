@@ -56,7 +56,9 @@ public class CardFactory : MonoBehaviour {
 		action.baseAttack = row._ATTACK;
 		action.baseReputation = row._REPUTATION;
 		action.canTargetAllies = row._CANTARGETALLIES;
-		action.canTargetPlayers = row._CANTARGETPLAYERS;
+		action.canTargetEnemyPlayer = row._CANTARGETENEMYPLAYER;
+		action.canTargetSelf = row._CANTARGETSELF;
+		action.canTargetActors = row._CANTARGETACTORS;
 	}
 
 

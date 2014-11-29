@@ -65,6 +65,26 @@ public class GameManager : MonoBehaviour {
 			CardFactory.Instance.CreateActor(ActorDB.rowIds.ACTOR_ADAMBALDWIN, PlayerID.Player1);
 			CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_KICKSTARTER, PlayerID.Player1);
 			CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_GAMERSAREDEAD, PlayerID.Player1);
+			CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_KICKSTARTER, PlayerID.Player1);
+			CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_KICKSTARTER, PlayerID.Player1);
+			CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_KICKSTARTER, PlayerID.Player1);
+			CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_KICKSTARTER, PlayerID.Player1);
+			CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_KICKSTARTER, PlayerID.Player1);
+			CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_KICKSTARTER, PlayerID.Player1);
+			CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_KICKSTARTER, PlayerID.Player1);
+			CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_KICKSTARTER, PlayerID.Player1);
+			CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_KICKSTARTER, PlayerID.Player1);
+			CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_KICKSTARTER, PlayerID.Player1);
+			CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_KICKSTARTER, PlayerID.Player1);
+			CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_KICKSTARTER, PlayerID.Player1);
+			CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_KICKSTARTER, PlayerID.Player1);
+			CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_KICKSTARTER, PlayerID.Player1);
+			CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_KICKSTARTER, PlayerID.Player1);
+			CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_KICKSTARTER, PlayerID.Player1);
+			CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_KICKSTARTER, PlayerID.Player1);
+			CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_KICKSTARTER, PlayerID.Player1);
+			CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_KICKSTARTER, PlayerID.Player1);
+
 		}
 		if(localPlayer == player2 || offlineMode){
 			CardFactory.Instance.CreateActor(ActorDB.rowIds.ACTOR_ANITASARKEESIAN, PlayerID.Player2);

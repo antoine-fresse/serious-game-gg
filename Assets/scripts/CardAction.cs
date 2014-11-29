@@ -4,32 +4,20 @@ using System.Collections;
 
 public class CardAction : Card {
 
-    public bool canTargetPlayers = false;
+    public bool canTargetEnemyPlayer = false;
     public bool canTargetAllies = false;
+	public bool canTargetSelf = false;
+	public bool canTargetActors = false;
 
 
     protected override void init(){
         base.init();
         cardType = CardType.Action;
-
     }
 
 	
     public override bool isValidTarget(Target t) {
-        if (t.TargetType == TargetType.Player) {
-            if (!canTargetPlayers)
-                return false;
-
-            Player p = (Player)t;
-            return p == owner ? canTargetAllies : true;
-        }
-        else {
-            Card c = (Card)t;
-            if (c.place != Place.Board)
-                return false;
-
-            return owner == c.owner ? canTargetAllies : true;
-        }
+	    return effect.IsValidTarget(t);
     }
 
 	[RPC]
@@ -39,13 +27,15 @@ public class CardAction : Card {
 
 		show();
 
+		destroy();
+
 		owner.IncreaseCorruption(corruptionCost);
 		owner.IncreaseSexisme(sexismeCost);
 
 
 		effect.OnActionPerformed(t);
 
-		destroy();
+		
 	}
 
 }

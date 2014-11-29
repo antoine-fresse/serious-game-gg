@@ -22,8 +22,10 @@ namespace GoogleFu
 		public int _ATTACK;
 		public int _REPUTATION;
 		public bool _CANTARGETALLIES;
-		public bool _CANTARGETPLAYERS;
-		public ActionDBRow(string __NAME, string __DESC, string __CORRUPTIONCOST, string __SEXISMECOST, string __CARDEFFECT, string __CARDEFFECTDESC, string __ATTACK, string __REPUTATION, string __CANTARGETALLIES, string __CANTARGETPLAYERS) 
+		public bool _CANTARGETENEMYPLAYER;
+		public bool _CANTARGETSELF;
+		public bool _CANTARGETACTORS;
+		public ActionDBRow(string __NAME, string __DESC, string __CORRUPTIONCOST, string __SEXISMECOST, string __CARDEFFECT, string __CARDEFFECTDESC, string __ATTACK, string __REPUTATION, string __CANTARGETALLIES, string __CANTARGETENEMYPLAYER, string __CANTARGETSELF, string __CANTARGETACTORS) 
 		{
 			_NAME = __NAME.Trim();
 			_DESC = __DESC.Trim();
@@ -66,14 +68,28 @@ namespace GoogleFu
 			}
 			{
 			bool res;
-				if(bool.TryParse(__CANTARGETPLAYERS, out res))
-					_CANTARGETPLAYERS = res;
+				if(bool.TryParse(__CANTARGETENEMYPLAYER, out res))
+					_CANTARGETENEMYPLAYER = res;
 				else
-					Debug.LogError("Failed To Convert CANTARGETPLAYERS string: "+ __CANTARGETPLAYERS +" to bool");
+					Debug.LogError("Failed To Convert CANTARGETENEMYPLAYER string: "+ __CANTARGETENEMYPLAYER +" to bool");
+			}
+			{
+			bool res;
+				if(bool.TryParse(__CANTARGETSELF, out res))
+					_CANTARGETSELF = res;
+				else
+					Debug.LogError("Failed To Convert CANTARGETSELF string: "+ __CANTARGETSELF +" to bool");
+			}
+			{
+			bool res;
+				if(bool.TryParse(__CANTARGETACTORS, out res))
+					_CANTARGETACTORS = res;
+				else
+					Debug.LogError("Failed To Convert CANTARGETACTORS string: "+ __CANTARGETACTORS +" to bool");
 			}
 		}
 
-		public int Length { get { return 10; } }
+		public int Length { get { return 12; } }
 
 		public string this[int i]
 		{
@@ -116,7 +132,13 @@ namespace GoogleFu
 					ret = _CANTARGETALLIES.ToString();
 					break;
 				case 9:
-					ret = _CANTARGETPLAYERS.ToString();
+					ret = _CANTARGETENEMYPLAYER.ToString();
+					break;
+				case 10:
+					ret = _CANTARGETSELF.ToString();
+					break;
+				case 11:
+					ret = _CANTARGETACTORS.ToString();
 					break;
 			}
 
@@ -155,8 +177,14 @@ namespace GoogleFu
 				case "CANTARGETALLIES":
 					ret = _CANTARGETALLIES.ToString();
 					break;
-				case "CANTARGETPLAYERS":
-					ret = _CANTARGETPLAYERS.ToString();
+				case "CANTARGETENEMYPLAYER":
+					ret = _CANTARGETENEMYPLAYER.ToString();
+					break;
+				case "CANTARGETSELF":
+					ret = _CANTARGETSELF.ToString();
+					break;
+				case "CANTARGETACTORS":
+					ret = _CANTARGETACTORS.ToString();
 					break;
 			}
 
@@ -174,7 +202,9 @@ namespace GoogleFu
 			ret += "{" + "ATTACK" + " : " + _ATTACK.ToString() + "} ";
 			ret += "{" + "REPUTATION" + " : " + _REPUTATION.ToString() + "} ";
 			ret += "{" + "CANTARGETALLIES" + " : " + _CANTARGETALLIES.ToString() + "} ";
-			ret += "{" + "CANTARGETPLAYERS" + " : " + _CANTARGETPLAYERS.ToString() + "} ";
+			ret += "{" + "CANTARGETENEMYPLAYER" + " : " + _CANTARGETENEMYPLAYER.ToString() + "} ";
+			ret += "{" + "CANTARGETSELF" + " : " + _CANTARGETSELF.ToString() + "} ";
+			ret += "{" + "CANTARGETACTORS" + " : " + _CANTARGETACTORS.ToString() + "} ";
 			return ret;
 		}
 	}
@@ -206,121 +236,145 @@ namespace GoogleFu
 														"1",
 														"0",
 														"DefaultEffect",
-														"Enleve une carte al\u00e9atoire de la main adverse",
+														"Enleve %ATTACK% carte al\u00e9atoire de la main adverse",
 														"1",
-														"12",
+														"0",
 														"FALSE",
-														"TRUE"));
+														"TRUE",
+														"FALSE",
+														"FALSE"));
 			Rows.Add( new ActionDBRow("D\u00e9claration sans fondement",
 														"Inconsistencies in ZQ claim",
 														"0",
 														"0",
 														"DefaultEffect",
-														"Reduit la r\u00e9putation de l'adversaire ou la carte cibl\u00e9e de X",
+														"Reduit la r\u00e9putation de l'adversaire ou la carte cibl\u00e9e de %ATTACK%",
 														"2",
-														"11",
-														"FALSE",
-														"FALSE"));
-			Rows.Add( new ActionDBRow("Remise de prix truqu\u00e9e",
-														"Indiecade corruption ZQ gagne. award selectionn\u00e9 par un qqn avec qui elle avait une relation",
-														"1",
 														"0",
-														"DefaultEffect",
-														"Gagne 5 reputation",
-														"3",
-														"10",
+														"FALSE",
+														"TRUE",
 														"FALSE",
 														"TRUE"));
+			Rows.Add( new ActionDBRow("Remise de prix truqu\u00e9e",
+														"Indiecade corruption ZQ gagne. award selectionn\u00e9 par un qqn avec qui elle avait une relation",
+														"2",
+														"0",
+														"DefaultEffect",
+														"Gagne %ATTACK% reputation",
+														"5",
+														"0",
+														"TRUE",
+														"FALSE",
+														"TRUE",
+														"FALSE"));
 			Rows.Add( new ActionDBRow("Abus de plainte DMCA",
 														"Zoe Quinn est accus\u00e9e d'utiliser les paintes DMCA pour retirer des critiques n\u00e9gatives de youtube",
-														"1",
+														"3",
 														"0",
 														"DefaultEffect",
 														"Enleve une carte al\u00e9atoire de la main adverse",
-														"4",
-														"9",
+														"1",
+														"0",
+														"FALSE",
+														"TRUE",
 														"FALSE",
 														"FALSE"));
 			Rows.Add( new ActionDBRow("Objectif de financement participatif atteint",
 														"TFYC atteignent leur objectif de financement sur indiegogo",
 														"0",
 														"0",
-														"DefaultEffect",
-														"Pioche 2 cartes",
-														"5",
-														"8",
+														"DrawEffect",
+														"Pioche %ATTACK% cartes",
+														"2",
+														"0",
 														"FALSE",
-														"TRUE"));
+														"FALSE",
+														"TRUE",
+														"FALSE"));
 			Rows.Add( new ActionDBRow("Alerte \u00e0 la bombe",
 														"-",
 														"0",
-														"0",
+														"5",
 														"DefaultEffect",
-														"Tue une carte de type non gamergate",
-														"6",
-														"7",
+														"Tue une carte qui coute de la corruption",
+														"1",
+														"0",
 														"FALSE",
-														"FALSE"));
+														"FALSE",
+														"FALSE",
+														"TRUE"));
 			Rows.Add( new ActionDBRow("Gamers are dead",
 														"-",
-														"0",
+														"5",
 														"0",
 														"DefaultEffect",
-														"Tue une carte de type gamegate",
-														"7",
-														"6",
+														"Tue une carte qui coute du sexisme",
+														"1",
+														"0",
+														"FALSE",
+														"FALSE",
 														"FALSE",
 														"TRUE"));
 			Rows.Add( new ActionDBRow("Menaces de mort",
 														"-",
 														"0",
-														"1",
+														"5",
 														"DefaultEffect",
 														"Renvoie une carte dans la main du joueur",
-														"8",
-														"5",
-														"FALSE",
-														"FALSE"));
-			Rows.Add( new ActionDBRow("Hack de 4chan",
-														"-",
 														"1",
 														"0",
-														"DefaultEffect",
-														"\"+Y\" sexisme adverse",
-														"9",
-														"4",
+														"TRUE",
+														"FALSE",
 														"FALSE",
 														"TRUE"));
+			Rows.Add( new ActionDBRow("Hack de 4chan",
+														"-",
+														"2",
+														"0",
+														"DefaultEffect",
+														"Augmente le sexisme de l'adversaire de %ATTACK%",
+														"5",
+														"0",
+														"FALSE",
+														"TRUE",
+														"FALSE",
+														"FALSE"));
 			Rows.Add( new ActionDBRow("Retirer les publicit\u00e9s",
 														"-",
 														"0",
-														"1",
-														"DefaultEffect",
-														"Baisse l'attaque d'une carte website",
-														"10",
-														"3",
-														"FALSE",
-														"FALSE"));
-			Rows.Add( new ActionDBRow("Confession",
-														"-",
-														"1",
-														"0",
-														"DefaultEffect",
-														"\"-X\" en corruption ou sexisme",
-														"11",
 														"2",
+														"DefaultEffect",
+														"Baisse l'attaque d'une carte",
+														"2",
+														"0",
+														"FALSE",
+														"FALSE",
 														"FALSE",
 														"TRUE"));
+			Rows.Add( new ActionDBRow("Confession",
+														"-",
+														"0",
+														"0",
+														"DefaultEffect",
+														"Reduit de %ATTACK% le plus \u00e9lev\u00e9 entre votre corruption et sexisme",
+														"5",
+														"0",
+														"FALSE",
+														"FALSE",
+														"TRUE",
+														"FALSE"));
 			Rows.Add( new ActionDBRow("Harcelement",
 														"-",
 														"0",
-														"1",
+														"3",
 														"DefaultEffect",
 														"Empeche une carte d'attaquer",
-														"12",
 														"1",
+														"0",
 														"FALSE",
-														"FALSE"));
+														"FALSE",
+														"FALSE",
+														"TRUE"));
 		}
 		public ActionDBRow GetRow(rowIds rowID)
 		{

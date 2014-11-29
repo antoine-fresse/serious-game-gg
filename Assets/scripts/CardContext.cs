@@ -18,10 +18,7 @@ public class CardContext : Card {
     }
 
     public override bool isValidTarget(Target t) {
-	    if (t.TargetType == TargetType.Context)
-		    return true;
-
-	    return false;
+	    return effect.IsValidTarget(t);
     }
 
 

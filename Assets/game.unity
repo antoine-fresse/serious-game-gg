@@ -549,7 +549,6 @@ MonoBehaviour:
   handPos: {fileID: 1151891785}
   boardPos: {fileID: 1359325391}
   deckPos: {fileID: 240307989}
-  maxCardsInHand: 6
   reputation: 30
   corruption: 0
   sexisme: 0
@@ -1660,7 +1659,6 @@ MonoBehaviour:
   handPos: {fileID: 1793461097}
   boardPos: {fileID: 1525974197}
   deckPos: {fileID: 1807140970}
-  maxCardsInHand: 6
   reputation: 30
   corruption: 0
   sexisme: 0
@@ -2425,7 +2423,7 @@ RectTransform:
   m_RootOrder: 4
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 50, y: 87.5}
+  m_AnchoredPosition: {x: 175, y: 88}
   m_SizeDelta: {x: -560, y: 155}
   m_Pivot: {x: .5, y: .50000006}
 --- !u!1 &1178164367
@@ -3388,7 +3386,7 @@ RectTransform:
   m_RootOrder: 5
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -50, y: -87.5}
+  m_AnchoredPosition: {x: -175, y: -87.5}
   m_SizeDelta: {x: -560, y: 155}
   m_Pivot: {x: .5, y: .499999762}
 --- !u!1 &1797460628

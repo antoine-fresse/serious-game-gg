@@ -47,20 +47,7 @@ public class CardActor : Card {
 
     public override bool isValidTarget(Target t) {
 
-		if (!canAttack || place != Place.Board || t == this)
-			return false;
-
-		if (t.TargetType == TargetType.Player) {
-			return owner != (Player)t;
-		}
-
-		Card ca = (Card)t;
-
-		if (ca.place == Place.Board && ca.owner != owner) {
-			return true;
-		}
-
-        return true;
+	    return effect.IsValidTarget(t);
     }
 
     public override void OnTurnStart() {
