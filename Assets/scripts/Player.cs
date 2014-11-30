@@ -1,8 +1,10 @@
+using System;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using Random = UnityEngine.Random;
 
 public class Player : Target {
 
@@ -75,29 +77,62 @@ public class Player : Target {
 		c.effect.OnPlacedOnBoard();
 	}
 
+	public void MoveToHand(Card actor) {
+		if (!board.Contains(actor))
+			return;
+
+		if (hand.Count >= MaxCardsInHand) {
+			actor.destroy();
+			return;
+		}
+		board.Remove(actor);
+		hand.Add(actor);
+		actor.place = Place.Hand;
+		actor.attack = actor.baseAttack;
+		actor.reputation = actor.baseReputation;
+	}
+
 	public void DrawRPC(int times = 1) {
 		photonView.RPC("Draw", PhotonTargets.AllBuffered, times);
 	}
 
 	[RPC]
     public void Draw(int times = 1) {
+
+		
         if (times < 1) {
             return;
         }
         if (deck.Count == 0)
-            ReduceReputation(times);
+			ChangeReputation(-times);
         else{
             if (hand.Count < MaxCardsInHand) {
-                Card d = deck[0];
-                deck.RemoveAt(0);
-                d.show();
-                hand.Add(d);
-                d.place = Place.Hand;
-				d.effect.OnDraw();
+
+				if (this != GameManager.instance.localPlayer && !GameManager.instance.offlineMode)
+					return;
+
+                Card card = deck[Random.Range(0, deck.Count-1)];
+				deck.Remove(card);
+				hand.Add(card);
+				card.place = Place.Hand;
+				card.effect.OnDraw();
+	            card.show();
+				photonView.RPC("HasDrawn", PhotonTargets.OthersBuffered, card.photonView.viewID);
+
                 Draw(times - 1);
             }
         }
     }
+
+	[RPC]
+	void HasDrawn(int viewId) {
+		var card = PhotonView.Find(viewId).GetComponent<Card>();
+		deck.Remove(card);
+		hand.Add(card);
+		card.place = Place.Hand;
+		card.effect.OnDraw();
+	}
+
     void Update() {
         DisplayDeck();
         DisplayHand();
@@ -215,7 +250,7 @@ public class Player : Target {
 		        if (GameManager.instance.localPlayer == this) 
 					card.show();
 		        else {
-					card.hide();
+					card.show();
 		        }
 		        
 	        }
@@ -228,16 +263,19 @@ public class Player : Target {
         foreach (var card in board) {
 			card.transform.SetParent(GameObject.Find("Cards").transform);
             card.transform.position = pos;
-            pos += 2*offset;
+            pos += 3*offset;
 			card.show();
         }
     }
 
-    public void ReduceReputation(int value)
+	public void ChangeReputation(int value)
     {
-        reputation -= value;
-		Shake();
-        if (reputation <= 0)
+        reputation = Mathf.Clamp(reputation + value,0,30);
+
+		if(value < 0)
+			Shake();
+
+        if (reputation == 0)
         {
             GameManager.instance.playerDied(this);
         }
@@ -279,4 +317,24 @@ public class Player : Target {
         if (deck.Contains(c))
             deck.Remove(c);
     }
+
+	public void Discard(int nb) {
+
+		if (this != GameManager.instance.localPlayer && !GameManager.instance.offlineMode)
+			return;
+
+		if (nb > hand.Count)
+			nb = hand.Count;
+
+		for (var i = 0; i < nb; i++) {
+			var n = Random.Range(0, hand.Count - 1);
+			photonView.RPC("DiscardRPC", PhotonTargets.AllBuffered, hand[n].photonView.viewID);
+		}
+
+
+	}
+	[RPC]
+	void DiscardRPC(int viewId) {
+		PhotonView.Find(viewId).GetComponent<Card>().destroy();
+	}
 }

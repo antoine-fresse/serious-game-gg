@@ -73,9 +73,11 @@ public abstract class Card : Target {
 	protected abstract void useOnRPC(int viewID);
 
     public abstract bool isValidTarget(Target c);
-    public void ReduceReputation(int value) {
-        reputation -= value;
-		Shake();
+    public void ChangeReputation(int value) {
+        reputation += value;
+		if(value < 0)
+			Shake();
+
         if (reputation <= 0) {
 			destroy();
         }
@@ -95,7 +97,8 @@ public abstract class Card : Target {
 
 	    cardDesc.text = description;
 
-		cardEffect.text = Regex.Replace(effectDesc, "%ATTACK%", attack.ToString(), RegexOptions.IgnoreCase);
+		cardEffect.text = Regex.Replace(effectDesc, "%ATTACK%", "<b>"+attack.ToString()+"</b>", RegexOptions.IgnoreCase);
+		cardEffect.text = Regex.Replace(cardEffect.text, "%REPUTATION%", "<b>" + reputation.ToString() + "</b>", RegexOptions.IgnoreCase);
 
 		switch (place) {
 			case Place.Board:

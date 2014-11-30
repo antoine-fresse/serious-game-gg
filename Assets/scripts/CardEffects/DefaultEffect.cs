@@ -8,11 +8,11 @@ public class DefaultEffect : AbstractCardEffect {
 		var attacker = GetComponent<CardActor>();
 		if (target.TargetType == TargetType.Player) {
 			Player p = (Player)target;
-			p.ReduceReputation(attacker.attack);
+			p.ChangeReputation(-attacker.attack);
 		} else if (target.TargetType == TargetType.Card) {
 			Card ca = (Card)target;
-			ca.ReduceReputation(attacker.attack);
-			attacker.ReduceReputation(ca.attack);
+			ca.ChangeReputation(-attacker.attack);
+			attacker.ChangeReputation(-ca.attack);
 
 			ca.effect.OnAttackReceived(attacker);
 			attacker.effect.OnAttackReceived(ca);
@@ -23,10 +23,10 @@ public class DefaultEffect : AbstractCardEffect {
 		var attacker = GetComponent<CardAction>();
 		if (target.TargetType == TargetType.Card) {
 			Card c = (Card)target;
-			c.ReduceReputation(attacker.attack);
+			c.ChangeReputation(-attacker.attack);
 		} else {
 			Player p = (Player)target;
-			p.ReduceReputation(attacker.attack);
+			p.ChangeReputation(-attacker.attack);
 		}
 	}
 }

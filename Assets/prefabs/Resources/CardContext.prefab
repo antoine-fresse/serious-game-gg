@@ -109,12 +109,12 @@ MonoBehaviour:
     m_FontStyle: 0
     m_BestFit: 1
     m_MinSize: 6
-    m_MaxSize: 40
+    m_MaxSize: 12
     m_Alignment: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
-    m_LineSpacing: 1
+    m_LineSpacing: .600000024
   m_Text: "Reduit la r\xE9putation de l'adversaire ou la carte cibl\xE9e de X"
 --- !u!114 &11400002
 MonoBehaviour:
@@ -327,12 +327,12 @@ MonoBehaviour:
     m_FontStyle: 2
     m_BestFit: 1
     m_MinSize: 6
-    m_MaxSize: 40
-    m_Alignment: 3
+    m_MaxSize: 10
+    m_Alignment: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
-    m_LineSpacing: 1
+    m_LineSpacing: .600000024
   m_Text: "Suppression massive de commentaires sur reddit - liens entre zoe quinn
     et un mod\xE9rateur"
 --- !u!114 &11400020

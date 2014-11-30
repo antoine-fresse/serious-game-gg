@@ -27,4 +27,6 @@ MonoBehaviour:
   - MoveToBoardRPC
   - SetContext
   - useOnRPC
+  - DiscardRPC
+  - HasDrawn
   DisableAutoOpenWizard: 0

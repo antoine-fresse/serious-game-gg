@@ -19,15 +19,15 @@ public class CardActor : Card {
 
 	void Update() {
 
-		string attackText = attack < baseAttack ? "<color=maroon>" : "";
+		string attackText = attack < baseAttack ? "<color=maroon>" : (attack > baseAttack ? "<color=green>" : "");
 		attackText += attack;
-		attackText += attack < baseAttack ? "</color>" : "";
+		attackText += attack < baseAttack || attack > baseAttack ? "</color>" : "";
 
-		string reputationText = reputation < baseReputation ? "<color=maroon>" : "";
+		string reputationText = reputation < baseReputation ? "<color=maroon>" : (reputation > baseReputation ? "<color=green>" : "");
 		reputationText += reputation;
-		reputationText += reputation < baseReputation ? "</color>" : "";
+		reputationText += (reputation < baseReputation || reputation > baseReputation) ? "</color>" : "";
 
-		cardStats.text = attackText + "   " + reputationText;
+		cardStats.text = attackText + (attack < 10 ? " " : "") + " " + (reputation < 10 ? " " : "") + reputationText;
 	}
 
 	[RPC]
