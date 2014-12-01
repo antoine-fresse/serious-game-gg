@@ -253,8 +253,8 @@ namespace GoogleFu
 														"1",
 														"4",
 														"AoeOnPlacedEffect",
-														"Inflige 3 d\u00e9gats \u00e0 toutes les cartes adverses quand cette carte est jou\u00e9e",
-														"3"));
+														"Inflige 2 d\u00e9gats \u00e0 toutes les cartes adverses quand cette carte est jou\u00e9e",
+														"2"));
 			Rows.Add( new ActorDBRow("Kotaku",
 														"News Website",
 														"Gaming news website",
