@@ -32,7 +32,7 @@ public class DeckManager : MonoBehaviour {
 		}
 
 		if (!list) return;
-		var newList = "Deck(" + nbCardsInDeck + ")\n";
+		var newList = "Deck(" + nbCardsInDeck + "/20)\n";
 		newList += deck.Keys.Aggregate("", (current, k) => current + ("\n" + GetNameFromId(k) + " : " + deck[k]));
 		list.text = newList;
 	}
@@ -72,7 +72,7 @@ public class DeckManager : MonoBehaviour {
 		deck = new Dictionary<string, int>();
 		nbCardsInDeck = 0;
 		if (!list) return;
-		var newList = "Deck(" + nbCardsInDeck + ")\n";
+		var newList = "Deck(" + nbCardsInDeck + "/20)\n";
 		newList += deck.Keys.Aggregate("", (current, k) => current + ("\n" + GetNameFromId(k) + " : " + deck[k]));
 		list.text = newList;
 	}
@@ -108,7 +108,7 @@ public class DeckManager : MonoBehaviour {
 			}
 		}
 		if (!list) return;
-		var newList = "Deck(" + nbCardsInDeck + ")\n";
+		var newList = "Deck(" + nbCardsInDeck + "/20)\n";
 		newList += deck.Keys.Aggregate("", (current, k) => current + ("\n" + GetNameFromId(k) + " : " + deck[k]));
 		list.text = newList;
 	}

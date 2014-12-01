@@ -37,7 +37,9 @@ public class NetworkManager : MonoBehaviour {
 		_launchButton = PanelRoom.transform.FindChild("Launch").GetComponent<Button>();
 	}
 
-
+	public void LeaveGame() {
+		Application.Quit();
+	}
 	void OnPhotonPlayerConnected(PhotonPlayer player) {
 		UpdateRoom();
 	}

@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviour {
 
 	public Text startGameText;
 
+	public bool gameEnded = false;
 
 
 	// Use this for initialization
@@ -45,7 +46,19 @@ public class GameManager : MonoBehaviour {
 	        PhotonNetwork.JoinOrCreateRoom("localRoom", new RoomOptions {maxPlayers = 2}, TypedLobby.Default);
 	    }
 		localPlayer = PhotonNetwork.isMasterClient ? player1 : player2;
+
+		localPlayer.fullName = PhotonNetwork.playerName;
+		if(!offlineMode)
+			getOtherPlayer(localPlayer).fullName = PhotonNetwork.otherPlayers[0].name;
+		
+
+
 		localPlayerTurn = localPlayer == player1;
+
+		if (!localPlayerTurn)
+			localPlayer.Swap();
+		if(offlineMode)
+			player2.Swap();
 
 		buttonEndTurn.interactable = false;
 
@@ -55,6 +68,15 @@ public class GameManager : MonoBehaviour {
 
 	void Start() {
 		StartCoroutine(StartGame());
+	}
+
+	public void LeaveGame() {
+		Application.Quit();
+	}
+
+	void OnPhotonPlayerDisconnected() {
+		PhotonNetwork.LeaveRoom();
+		PhotonNetwork.LoadLevel(0);
 	}
 
 	void InstantiateDecks() {
@@ -125,9 +147,9 @@ public class GameManager : MonoBehaviour {
 
 		if (localPlayerTurn) {
 			DOTween.Sequence()
-				.Append(yourTurnText.DOMove(new Vector3(0f, 0f, 0f), 1.0f).SetEase(Ease.OutBounce))
+				.Append(yourTurnText.DOLocalMove(new Vector3(0f, 0f, 0f), 1.0f).SetEase(Ease.OutBounce))
 				.AppendInterval(1.0f)
-				.Append(yourTurnText.DOMove(new Vector3(0f, (float)Screen.height * 2f, 0f), 0f));
+				.Append(yourTurnText.DOLocalMove(new Vector3(0f, (float)Screen.height * 2f, 0f), 0f));
 			buttonEndTurn.interactable = true;
 		}
 
@@ -141,8 +163,20 @@ public class GameManager : MonoBehaviour {
 	    }
     }
 
-    public void playerDied(Player deadPlayer){
-        
+    public void playerDied(Player deadPlayer) {
+	    gameEnded = true;
+
+	    if (deadPlayer == localPlayer) {
+		    yourTurnText.GetComponent<Text>().text = "Vous avez perdu !";
+		    DOTween.Sequence()
+				.Append(yourTurnText.DOLocalMove(new Vector3(0f, 0f, 0f), 1.0f).SetEase(Ease.OutBounce));
+	    }
+
+	    else {
+			yourTurnText.GetComponent<Text>().text = "Victoire !";
+			DOTween.Sequence()
+				.Append(yourTurnText.DOLocalMove(new Vector3(0f, 0f, 0f), 1.0f).SetEase(Ease.OutBounce));
+	    }
     }
 
 	[RPC]
@@ -160,7 +194,8 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void EndTurn() {
-		photonView.RPC("EndTurnRPC", PhotonTargets.AllBuffered);
+		if (!gameEnded)
+			photonView.RPC("EndTurnRPC", PhotonTargets.AllBuffered);
 	}
 	[RPC]
     void EndTurnRPC()
@@ -175,9 +210,9 @@ public class GameManager : MonoBehaviour {
 		}
 		if (localPlayerTurn) {
 		    DOTween.Sequence()
-			    .Append(yourTurnText.DOMove(new Vector3(0f, 0f, 0f), 1.0f).SetEase(Ease.OutBounce))
+				.Append(yourTurnText.DOLocalMove(new Vector3(0f, 0f, 0f), 1.0f).SetEase(Ease.OutBounce))
 			    .AppendInterval(1.0f)
-			    .Append(yourTurnText.DOMove(new Vector3(0f, (float) Screen.height*2f, 0f), 0f));
+				.Append(yourTurnText.DOLocalMove(new Vector3(0f, (float)Screen.height * 2f, 0f), 0f));
 			buttonEndTurn.interactable = true;
 		}
 		else 
@@ -199,6 +234,9 @@ public class GameManager : MonoBehaviour {
 
 		if (!localPlayerTurn && !offlineMode)
             return;
+
+	    if (gameEnded)
+		    return;
 
         if (cardSelected == null && c.TargetType == TargetType.Card) {
             Card ca = (Card)c;

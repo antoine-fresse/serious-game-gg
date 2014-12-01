@@ -144,7 +144,7 @@ namespace GoogleFu
 			Rows.Add( new TrendingDBRow("#GamerGate is trending",
 														"",
 														"2",
-														"0,5",
+														"0.5",
 														"Double les malus de corruption et reduit les malus de sexisme",
 														"DefaultEffect"));
 			Rows.Add( new TrendingDBRow("#NotYourShield is trending",
@@ -161,7 +161,7 @@ namespace GoogleFu
 														"DefaultEffect"));
 			Rows.Add( new TrendingDBRow("#StopGamerGate is trending",
 														"",
-														"0,5",
+														"0.5",
 														"2",
 														"Double les malus de sexisme et reduit les malus de corruption",
 														"DefaultEffect"));

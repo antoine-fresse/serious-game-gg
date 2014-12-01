@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Text.RegularExpressions;
 using System.Collections;
@@ -75,10 +76,17 @@ public abstract class Card : Target {
     public abstract bool isValidTarget(Target c);
     public void ChangeReputation(int value) {
         reputation += value;
-		if(value < 0)
-			Shake();
+		var color = "green";
+	    if (value < 0) {
+		    Shake();
+		    color = "maroon";
+	    }
+
+	    var go = (GameObject)Instantiate(Resources.Load("FloatingText"), transform.position, Quaternion.identity);
+		go.GetComponent<Text>().text = "<color=" + color + ">" + value + "</color>";
 
         if (reputation <= 0) {
+	        reputation = 0;
 			destroy();
         }
     }
@@ -174,15 +182,24 @@ public abstract class Card : Target {
 		if (place == Place.Board) {
 			effect.OnDeath();
 		}
+	    show();
         owner.RemoveCard(this);
         place = Place.Graveyard;
 
 
-		transform.SetParent(GameObject.Find("Cards").transform);
-	    DOTween.Sequence()
+		transform.SetParent(owner.graveyardPos);
+	    /*DOTween.Sequence()
 		    .Append(transform.DOScale(new Vector3(0.0f, 0.0f, 0.0f), 1.0f))
-			.Append(transform.DOMove(new Vector3(10000f,0f), 0f));
+			.Append(transform.DOMove(new Vector3(10000f,0f), 0f));*/
 
+	    transform.DOMove(owner.graveyardPos.transform.position, 1.5f);
+
+	    var outline = GetComponent<Outline>();
+	    var color = outline.effectColor;
+	    color.a = 0;
+	    outline.effectColor = color;
+
+	    GetComponent<EventTrigger>().enabled = false;
 
 
     }

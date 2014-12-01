@@ -18,6 +18,10 @@ public class UIManager : MonoBehaviour {
 	public Text textCorruptionJ2;
 	public Text textSexismeJ2;
 
+	public Text pseudoJ1;
+	public Text pseudoJ2;
+
+
 
     private Player p1;
     private Player p2;
@@ -42,6 +46,7 @@ public class UIManager : MonoBehaviour {
 		textCorruptionJ2.text = p2.corruption.ToString("D");
 		textSexismeJ2.text = p2.sexisme.ToString("D");
 
-
+		pseudoJ1.text = p1.fullName;
+		pseudoJ2.text = p2.fullName;
 	}
 }

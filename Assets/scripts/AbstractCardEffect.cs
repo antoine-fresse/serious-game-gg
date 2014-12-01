@@ -3,6 +3,12 @@ using System.Collections;
 
 public abstract class AbstractCardEffect : MonoBehaviour {
 
+	void Update() {
+		if(GameManager.instance)
+			OnUpdate();
+	}
+
+	public virtual void OnUpdate() { }
 	public virtual void OnInit() { }
 	public virtual void OnDraw() { }
 

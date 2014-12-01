@@ -12,6 +12,9 @@ public class Player : Target {
     public RectTransform boardPos;
 	public RectTransform deckPos;
 
+	public RectTransform graveyardPos;
+
+
 	private const int MaxCardsInHand = 8;
 	public int reputation = 30;
     public int corruption = 0;
@@ -73,8 +76,8 @@ public class Player : Target {
 
 		hand.Remove(c);
 		board.Add(c);
-		c.owner.corruption += c.corruptionCost;
-		c.owner.sexisme += c.sexismeCost;
+		c.owner.IncreaseCorruption(c.corruptionCost);
+		c.owner.IncreaseSexisme(c.sexismeCost);
 		c.place = Place.Board;
 		c.effect.OnPlacedOnBoard();
 	}
@@ -94,6 +97,11 @@ public class Player : Target {
 		actor.reputation = actor.baseReputation;
 		actor.canAttack = false;
 		actor.preventAttack = false;
+
+		var outline = actor.GetComponent<Outline>();
+		var color = outline.effectColor;
+		color.a = 0;
+		outline.effectColor = color;
 
 
 	}
@@ -240,11 +248,18 @@ public class Player : Target {
     }
 
     public void DisplayHand() {
-        Vector3 pos = /*handPos.position +*/ new Vector3(-cardWidth * hand.Count / 2, 0, 0);
-        var offset = new Vector3(cardWidth, 0, 0);
+        Vector3 pos = Vector3.zero;
+
+	    var offsetX = Mathf.Min(handPos.rect.width/hand.Count, cardWidth);
+		var offset = new Vector3(offsetX , 0, 0);
+
+	    pos += offset/2;
+
         foreach (var card in hand) {
 			card.transform.localPosition = pos;
 	        card.transform.SetParent(handPos);
+			
+
             pos += offset;
 
 	        if (GameManager.instance.offlineMode) {
@@ -256,11 +271,14 @@ public class Player : Target {
 		        if (GameManager.instance.localPlayer == this) 
 					card.show();
 		        else {
-					card.show();
+					card.hide();
 		        }
 		        
 	        }
         }
+
+		if (GameManager.instance.cardSelected)
+			GameManager.instance.cardSelected.transform.SetAsLastSibling();
     }
 
     public void DisplayBoard() {
@@ -269,7 +287,7 @@ public class Player : Target {
         foreach (var card in board) {
 			card.transform.SetParent(GameObject.Find("Cards").transform);
             card.transform.position = pos;
-            pos += 3*offset;
+            pos += offset;
 			card.show();
         }
     }
@@ -278,10 +296,16 @@ public class Player : Target {
     {
         reputation = Mathf.Clamp(reputation + value,0,30);
 
-		if(value < 0)
+		var color = "green";
+		if (value < 0) {
+			color = "maroon";
 			Shake();
+		}
 
-        if (reputation == 0)
+		var go = (GameObject)Instantiate(Resources.Load("FloatingText"), transform.position, Quaternion.identity);
+		go.GetComponent<Text>().text = "<color=" + color + ">" + value + "</color>";
+
+		if (reputation == 0)
         {
             GameManager.instance.playerDied(this);
         }
@@ -342,5 +366,46 @@ public class Player : Target {
 	[RPC]
 	void DiscardRPC(int viewId) {
 		PhotonView.Find(viewId).GetComponent<Card>().destroy();
+	}
+
+	public void Swap() {
+		/*public RectTransform handPos;
+		public RectTransform boardPos;
+		public RectTransform deckPos;
+
+		public RectTransform graveyardPos;
+		*/
+		var other = GameManager.instance.getOtherPlayer(this);
+
+		var old = other.handPos.position;
+		other.handPos.position = handPos.position;
+		handPos.position = old;
+
+		old = other.boardPos.position;
+		other.boardPos.position = boardPos.position;
+		boardPos.position = old;
+
+		old = other.deckPos.position;
+		other.deckPos.position = deckPos.position;
+		deckPos.position = old;
+
+		old = other.graveyardPos.position;
+		other.graveyardPos.position = graveyardPos.position;
+		graveyardPos.position = old;
+
+		old = other.transform.position;
+		other.transform.position = transform.position;
+		transform.position = old;
+
+		var stats = transform.FindChild("Stats");
+		old = stats.localPosition;
+		old.x = -old.x;
+		stats.localPosition = old;
+
+		stats = other.transform.FindChild("Stats");
+		old = stats.localPosition;
+		old.x = -old.x;
+		stats.localPosition = old;
+
 	}
 }

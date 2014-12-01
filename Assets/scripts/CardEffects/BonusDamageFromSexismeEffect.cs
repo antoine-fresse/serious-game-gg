@@ -4,6 +4,14 @@ using System.Collections;
 public class BonusDamageFromSexismeEffect : AbstractCardEffect {
 
 
+	public override void OnUpdate() {
+
+		var actor = GetComponent<CardActor>();
+
+		actor.cardEffect.text = actor.effectDesc + " (<color=green>" + GameManager.instance.getOtherPlayer(actor.owner).sexisme + "</color>)";
+
+
+	}
 
 	public override void OnAttackPerformed(Target target, int dmg) {
 
