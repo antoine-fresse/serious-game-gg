@@ -1,8 +1,5 @@
-using System;
-using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 using System.Collections.Generic;
 using Random = UnityEngine.Random;
 
@@ -15,7 +12,7 @@ public class Player : Target {
 	public RectTransform graveyardPos;
 
 
-	private const int MaxCardsInHand = 8;
+	private const int MaxCardsInHand = 6;
 	public int reputation = 30;
     public int corruption = 0;
     public int sexisme = 0;
@@ -26,7 +23,7 @@ public class Player : Target {
 
 	public Board boardUI;
 
-	public static int cardWidth = 110;
+	public const int cardWidth = 128;
 	// Use this for initialization
 
     protected override void init(){
@@ -248,16 +245,16 @@ public class Player : Target {
     }
 
     public void DisplayHand() {
-        Vector3 pos = Vector3.zero;
+		
 
 	    var offsetX = Mathf.Min(handPos.rect.width/hand.Count, cardWidth);
 		var offset = new Vector3(offsetX , 0, 0);
-
-	    pos += offset/2;
+		Vector3 pos = new Vector3((-hand.Count/2) * offsetX,0,0);
+	    //pos += offset/2;
 
         foreach (var card in hand) {
-			card.transform.localPosition = pos;
-	        card.transform.SetParent(handPos);
+			card.GetComponent<RectTransform>().anchoredPosition = pos;
+			card.GetComponent<RectTransform>().SetParent(handPos);
 			
 
             pos += offset;
@@ -324,16 +321,15 @@ public class Player : Target {
         // TODO SHUFFLE DECK
     }
 
-
     public void IncreaseCorruption(int cost) {
         if (GameManager.instance.contextCard) {
-            cost *= (int)GameManager.instance.contextCard.corruptionMultiplier;
+            cost = (int)(cost * GameManager.instance.contextCard.corruptionMultiplier);
         }
         corruption += cost;
     }
     public void IncreaseSexisme(int cost) {
         if (GameManager.instance.contextCard) {
-            cost *= (int)GameManager.instance.contextCard.sexismeMultiplier;
+            cost = (int)(cost * GameManager.instance.contextCard.sexismeMultiplier);
         }
         sexisme += cost;
     }
@@ -369,17 +365,13 @@ public class Player : Target {
 	}
 
 	public void Swap() {
-		/*public RectTransform handPos;
-		public RectTransform boardPos;
-		public RectTransform deckPos;
-
-		public RectTransform graveyardPos;
-		*/
+		
 		var other = GameManager.instance.getOtherPlayer(this);
 
 		var old = other.handPos.position;
 		other.handPos.position = handPos.position;
 		handPos.position = old;
+
 
 		old = other.boardPos.position;
 		other.boardPos.position = boardPos.position;
@@ -389,13 +381,32 @@ public class Player : Target {
 		other.deckPos.position = deckPos.position;
 		deckPos.position = old;
 
-		old = other.graveyardPos.position;
-		other.graveyardPos.position = graveyardPos.position;
-		graveyardPos.position = old;
+		other.graveyardPos.anchorMin = new Vector2(0,1);
+		other.graveyardPos.anchorMax = new Vector2(0, 1);
 
-		old = other.transform.position;
-		other.transform.position = transform.position;
-		transform.position = old;
+		var tr = other.graveyardPos.GetChild(0).GetComponent<RectTransform>();
+		tr.anchoredPosition = new Vector2(tr.anchoredPosition.x, -tr.anchoredPosition.y);
+		tr = graveyardPos.GetChild(0).GetComponent<RectTransform>();
+		tr.anchoredPosition = new Vector2(tr.anchoredPosition.x, -tr.anchoredPosition.y);
+
+		graveyardPos.anchorMin = Vector2.zero;
+		graveyardPos.anchorMax = Vector2.zero;
+		old = other.graveyardPos.anchoredPosition;
+		other.graveyardPos.anchoredPosition = graveyardPos.anchoredPosition;
+		graveyardPos.anchoredPosition = old;
+		
+
+
+		other.GetComponent<RectTransform>().anchorMin = Vector2.one;
+		other.GetComponent<RectTransform>().anchorMax = Vector2.one;
+		GetComponent<RectTransform>().anchorMin = Vector2.zero;
+		GetComponent<RectTransform>().anchorMax = Vector2.zero;
+		old = other.GetComponent<RectTransform>().anchoredPosition;
+		other.GetComponent<RectTransform>().anchoredPosition = GetComponent<RectTransform>().anchoredPosition;
+		GetComponent<RectTransform>().anchoredPosition = old;
+		
+
+
 
 		var stats = transform.FindChild("Stats");
 		old = stats.localPosition;

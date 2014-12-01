@@ -97,6 +97,7 @@ public class CardFactory : MonoBehaviour {
         actor.gameObject.AddComponent(row._CARDEFFECT);
         actor.baseAttack = row._ATTACK;
         actor.baseReputation = row._REPUTATION;
+	    actor.custom_param = row._CUSTOMPARAM;
 
 		actor.id = type;
     }

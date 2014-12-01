@@ -188,12 +188,21 @@ public abstract class Card : Target {
 
 
 		transform.SetParent(owner.graveyardPos);
-	    /*DOTween.Sequence()
-		    .Append(transform.DOScale(new Vector3(0.0f, 0.0f, 0.0f), 1.0f))
-			.Append(transform.DOMove(new Vector3(10000f,0f), 0f));*/
+	    
 
-	    transform.DOMove(owner.graveyardPos.transform.position, 1.5f);
+	    Debug.Log(transform.DOKill());
 
+	    if (cardType == CardType.Action) {
+		    transform.DOMove(GameObject.Find("Cards").transform.position, 0.5f);
+		    transform.DOMove(owner.graveyardPos.transform.position, 1.5f).SetDelay(1.5f);
+
+
+		    transform.DOScale(new Vector3(1.5f, 1.5f, 1.0f), 0.5f);
+		    transform.DOScale(Vector3.one, 1.0f).SetDelay(1.5f);
+	    }
+	    else {
+			transform.DOMove(owner.graveyardPos.transform.position, 1.5f);
+	    }
 	    var outline = GetComponent<Outline>();
 	    var color = outline.effectColor;
 	    color.a = 0;

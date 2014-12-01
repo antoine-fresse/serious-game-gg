@@ -22,7 +22,8 @@ namespace GoogleFu
 		public int _REPUTATION;
 		public string _CARDEFFECT;
 		public string _CARDEFFECTDESC;
-		public ActorDBRow(string __NAME, string __GROUP, string __DESC, string __CORRUPTIONCOST, string __SEXISMECOST, string __ATTACK, string __REPUTATION, string __CARDEFFECT, string __CARDEFFECTDESC) 
+		public int _CUSTOMPARAM;
+		public ActorDBRow(string __NAME, string __GROUP, string __DESC, string __CORRUPTIONCOST, string __SEXISMECOST, string __ATTACK, string __REPUTATION, string __CARDEFFECT, string __CARDEFFECTDESC, string __CUSTOMPARAM) 
 		{
 			_NAME = __NAME.Trim();
 			_GROUP = __GROUP.Trim();
@@ -57,9 +58,16 @@ namespace GoogleFu
 			}
 			_CARDEFFECT = __CARDEFFECT.Trim();
 			_CARDEFFECTDESC = __CARDEFFECTDESC.Trim();
+			{
+			int res;
+				if(int.TryParse(__CUSTOMPARAM, out res))
+					_CUSTOMPARAM = res;
+				else
+					Debug.LogError("Failed To Convert CUSTOMPARAM string: "+ __CUSTOMPARAM +" to int");
+			}
 		}
 
-		public int Length { get { return 9; } }
+		public int Length { get { return 10; } }
 
 		public string this[int i]
 		{
@@ -101,6 +109,9 @@ namespace GoogleFu
 				case 8:
 					ret = _CARDEFFECTDESC.ToString();
 					break;
+				case 9:
+					ret = _CUSTOMPARAM.ToString();
+					break;
 			}
 
 			return ret;
@@ -138,6 +149,9 @@ namespace GoogleFu
 				case "CARDEFFECTDESC":
 					ret = _CARDEFFECTDESC.ToString();
 					break;
+				case "CUSTOMPARAM":
+					ret = _CUSTOMPARAM.ToString();
+					break;
 			}
 
 			return ret;
@@ -154,6 +168,7 @@ namespace GoogleFu
 			ret += "{" + "REPUTATION" + " : " + _REPUTATION.ToString() + "} ";
 			ret += "{" + "CARDEFFECT" + " : " + _CARDEFFECT.ToString() + "} ";
 			ret += "{" + "CARDEFFECTDESC" + " : " + _CARDEFFECTDESC.ToString() + "} ";
+			ret += "{" + "CUSTOMPARAM" + " : " + _CUSTOMPARAM.ToString() + "} ";
 			return ret;
 		}
 	}
@@ -184,47 +199,52 @@ namespace GoogleFu
 														"GamerGate",
 														"28 aout - adam baldwin lance le hashtag #GamerGate",
 														"0",
+														"3",
+														"0",
 														"4",
-														"2",
-														"6",
 														"BuffFromCorruptionEffect",
-														"Gagne 2 en attaque par tour si l'adversaire a plus de corruption"));
+														"Gagne 2 en attaque par tour si l'adversaire a plus de corruption",
+														"2"));
 			Rows.Add( new ActorDBRow("Zoe Quinn",
 														"Anti-GamerGate",
 														"Zoe Quinn",
 														"8",
 														"0",
-														"6",
+														"5",
 														"1",
 														"ChargeEffect",
-														"Peut attaquer directement apr\u00e8s \u00eatre pos\u00e9e"));
+														"Peut attaquer directement apr\u00e8s \u00eatre pos\u00e9e",
+														"0"));
 			Rows.Add( new ActorDBRow("The Fine Young Capitalists",
 														"None",
 														"Groupe feministe qui a pour but d'aider les femmes dev",
 														"0",
 														"0",
 														"1",
-														"2",
+														"3",
 														"BonusDamageFromSexismeEffect",
-														"Inflige des d\u00e9gats bonus \u00e9quivalents au sexisme adverse"));
+														"Inflige des d\u00e9gats bonus \u00e9quivalents au sexisme adverse",
+														"0"));
 			Rows.Add( new ActorDBRow("Daniel Vavra",
 														"GamerGate",
 														"Designer de la saga \"Mafia\"",
 														"0",
 														"3",
-														"2",
+														"3",
 														"3",
 														"DefaultEffect",
-														""));
+														"",
+														"0"));
 			Rows.Add( new ActorDBRow("MundaneMatt",
 														"GamerGate",
 														"Youtuber",
 														"0",
 														"5",
 														"2",
-														"5",
+														"3",
 														"BonusDamageFromCorruptionEffect",
-														"Inflige des d\u00e9gats bonus \u00e9quivalents \u00e0 la corruption adverse"));
+														"Inflige des d\u00e9gats bonus \u00e9quivalents \u00e0 la corruption adverse",
+														"0"));
 			Rows.Add( new ActorDBRow("TotalBiscuit",
 														"GamerGate",
 														"Youtuber",
@@ -233,7 +253,8 @@ namespace GoogleFu
 														"1",
 														"4",
 														"AoeOnPlacedEffect",
-														"Inflige 3 d\u00e9gats \u00e0 toutes les cartes adverses quand cette carte est jou\u00e9e"));
+														"Inflige 3 d\u00e9gats \u00e0 toutes les cartes adverses quand cette carte est jou\u00e9e",
+														"3"));
 			Rows.Add( new ActorDBRow("Kotaku",
 														"News Website",
 														"Gaming news website",
@@ -242,16 +263,18 @@ namespace GoogleFu
 														"3",
 														"2",
 														"DefaultEffect",
-														""));
+														"",
+														"0"));
 			Rows.Add( new ActorDBRow("Georges Reese",
 														"Anti-GamerGate",
 														"Dell - A compar\u00e9 GamerGate au groupe terroriste ISIS",
 														"4",
 														"0",
 														"4",
-														"5",
+														"2",
 														"DefaultEffect",
-														""));
+														"",
+														"0"));
 			Rows.Add( new ActorDBRow("Gamasutra",
 														"News Website",
 														"Gaming news website",
@@ -260,25 +283,28 @@ namespace GoogleFu
 														"2",
 														"1",
 														"DrawOnDeathEffect",
-														"Piocher une carte quand cette carte est d\u00e9truite"));
+														"Piocher une carte quand cette carte est d\u00e9truite",
+														"1"));
 			Rows.Add( new ActorDBRow("Polygon",
 														"News Website",
 														"Gaming news website",
 														"6",
 														"0",
-														"6",
-														"6",
+														"5",
+														"3",
 														"DefaultEffect",
-														""));
+														"",
+														"0"));
 			Rows.Add( new ActorDBRow("Anita Sarkeesian",
 														"Anti-GamerGate",
 														"Feministe",
 														"3",
 														"0",
-														"1",
-														"4",
+														"0",
+														"3",
 														"BuffFromSexismeEffect",
-														"Gagne 2 en attaque par tour si l'adversaire a plus de sexisme"));
+														"Gagne 2 en attaque par tour si l'adversaire a plus de sexisme",
+														"2"));
 			Rows.Add( new ActorDBRow("Internet Aristocrat",
 														"GamerGate",
 														"Youtuber",
@@ -287,7 +313,8 @@ namespace GoogleFu
 														"2",
 														"3",
 														"DefaultEffect",
-														""));
+														"",
+														"0"));
 			Rows.Add( new ActorDBRow("Danielle Riendeau",
 														"Anti-GamerGate",
 														"Journaliste - A donn\u00e9 une note de 10/10 au jeu d'un ami",
@@ -296,7 +323,8 @@ namespace GoogleFu
 														"3",
 														"4",
 														"DefaultEffect",
-														""));
+														"",
+														"0"));
 		}
 		public ActorDBRow GetRow(rowIds rowID)
 		{

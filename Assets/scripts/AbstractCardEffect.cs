@@ -26,7 +26,7 @@ public abstract class AbstractCardEffect : MonoBehaviour {
 		} else if (target.TargetType == TargetType.Card) {
 			Card ca = (Card)target;
 			ca.ChangeReputation(-dmg);
-			attacker.ChangeReputation(-ca.attack);
+			//attacker.ChangeReputation(-ca.attack);
 
 			// Riposte
 			ca.effect.OnAttackReceived(attacker);

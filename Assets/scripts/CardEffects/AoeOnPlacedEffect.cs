@@ -12,7 +12,7 @@ public class AoeOnPlacedEffect : AbstractCardEffect {
 
 		foreach(var card in other.board.ToArray())
 		{
-			card.ChangeReputation(-3);
+			card.ChangeReputation(-actor.custom_param);
 		}
 
 	}

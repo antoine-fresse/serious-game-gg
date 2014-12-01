@@ -12,6 +12,8 @@ public class CardActor : Card {
 
 	public bool preventAttack = false;
 
+	public int custom_param = 0;
+
 	public Text cardStats;
 
     protected override void init(){
@@ -21,11 +23,11 @@ public class CardActor : Card {
 
 	void Update() {
 
-		string attackText = attack < baseAttack ? "<color=maroon>" : (attack > baseAttack ? "<color=green>" : "");
+		string attackText = attack < baseAttack ? "<color=maroon>" : (attack > baseAttack ? "<color=olive>" : "");
 		attackText += attack;
 		attackText += attack < baseAttack || attack > baseAttack ? "</color>" : "";
 
-		string reputationText = reputation < baseReputation ? "<color=maroon>" : (reputation > baseReputation ? "<color=green>" : "");
+		string reputationText = reputation < baseReputation ? "<color=maroon>" : (reputation > baseReputation ? "<color=olive>" : "");
 		reputationText += reputation;
 		reputationText += (reputation < baseReputation || reputation > baseReputation) ? "</color>" : "";
 
@@ -41,8 +43,7 @@ public class CardActor : Card {
 
 		
 		var dir = (c.transform.position - transform.position) / 10f;
-		DOTween.Sequence()
-				.Append(transform.DOPunchPosition(dir, Mathf.Clamp(dir.sqrMagnitude / 100f, 0.5f, 1f), 0, 0));
+		transform.DOPunchPosition(dir, Mathf.Clamp(dir.sqrMagnitude / 100f, 0.5f, 1f), 0, 0);
 		canAttack = false;
 		//selectable.interactable = false;
 	}

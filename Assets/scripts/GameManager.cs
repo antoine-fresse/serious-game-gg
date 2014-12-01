@@ -39,7 +39,6 @@ public class GameManager : MonoBehaviour {
 	void Awake () {
         instance = this;
 		photonView = GetComponent<PhotonView>();
-		Player.cardWidth = 110;
 		PhotonNetwork.offlineMode = offlineMode;
 	    if (offlineMode) {
 	        //PhotonNetwork.JoinLobby();

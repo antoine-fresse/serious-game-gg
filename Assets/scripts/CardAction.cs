@@ -1,3 +1,4 @@
+using DG.Tweening;
 using GoogleFu;
 using UnityEngine;
 using UnityEngine.UI;
@@ -26,6 +27,9 @@ public class CardAction : Card {
 	protected override void useOnRPC(int viewID) {
 
 		Target t = PhotonView.Find(viewID).GetComponent<Target>();
+
+
+		
 
 		show();
 
