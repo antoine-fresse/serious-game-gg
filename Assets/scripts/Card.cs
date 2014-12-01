@@ -53,7 +53,7 @@ public abstract class Card : Target {
 
 	public PlayerID ownerID;
 
-	
+	public string id;
 
 	public Player owner {
 		get { return ownerID == PlayerID.Player1 ? GameManager.instance.player1 : GameManager.instance.player2; }
@@ -99,28 +99,28 @@ public abstract class Card : Target {
 
 		cardEffect.text = Regex.Replace(effectDesc, "%ATTACK%", "<b>"+attack.ToString()+"</b>", RegexOptions.IgnoreCase);
 		cardEffect.text = Regex.Replace(cardEffect.text, "%REPUTATION%", "<b>" + reputation.ToString() + "</b>", RegexOptions.IgnoreCase);
+	    if (GameManager.instance) {
+		    switch (place) {
+			    case Place.Board:
+				    if (!owner.board.Contains(this)) {
+					    owner.board.Add(this);
+				    }
 
-		switch (place) {
-			case Place.Board:
-				if (!owner.board.Contains(this)) {
-					owner.board.Add(this);
-				}
-
-				break;
-			case Place.Deck:
-				if (!owner.deck.Contains(this)) {
-					owner.deck.Add(this);
-				}
+				    break;
+			    case Place.Deck:
+				    if (!owner.deck.Contains(this)) {
+					    owner.deck.Add(this);
+				    }
 
 
-				break;
-			case Place.Hand:
-				if (!owner.hand.Contains(this)) {
-					owner.hand.Add(this);
-				}
-				break;
-		}
-
+				    break;
+			    case Place.Hand:
+				    if (!owner.hand.Contains(this)) {
+					    owner.hand.Add(this);
+				    }
+				    break;
+		    }
+	    }
 	    var costText = "<color=maroon>" + corruptionCost + "</color>";
 	    costText += "\n";
 		costText += "<color=#0080ffff>" + sexismeCost + "</color>";

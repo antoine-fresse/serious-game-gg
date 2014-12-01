@@ -1,3 +1,4 @@
+using System.Reflection;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -31,9 +32,14 @@ public abstract class Target : MonoBehaviour {
 		selectable = GetComponent<Selectable>();
 	}
 
-    public void OnClick()
+    public void OnClick(BaseEventData evt)
     {
-		GameManager.instance.elementClicked(this);
+
+		if(GameManager.instance)
+			GameManager.instance.elementClicked(this);
+
+	    if (DeckManager.Instance && TargetType == TargetType.Card)
+		    DeckManager.Instance.OnClick((PointerEventData)evt, (Card) this );
     }
 
 	public void Shake() {

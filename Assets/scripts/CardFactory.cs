@@ -8,6 +8,7 @@ public class CardFactory : MonoBehaviour {
 	public GameObject prefabActor;
 	public GameObject prefabContext;
 
+	public Transform CardsContainer;
 
 	public static CardFactory Instance;
 	private ActionDB _actionDB;
@@ -35,7 +36,7 @@ public class CardFactory : MonoBehaviour {
 	}
 
 	[RPC]
-	private void CreateActionRPC(string type, int id, int viewId) {
+	public void CreateActionRPC(string type, int id, int viewId) {
 		var playerId = (PlayerID) id;
 		var row = _actionDB.GetRow(type);
 
@@ -43,7 +44,7 @@ public class CardFactory : MonoBehaviour {
 
 		action.GetComponent<PhotonView>().viewID = viewId;
 
-		action.transform.SetParent(GameObject.Find("Cards").transform);
+		action.transform.SetParent(CardsContainer);
 		action.transform.localScale = new Vector3(1f,1f,1f);
 
 		action.fullName = row._NAME;
@@ -59,6 +60,8 @@ public class CardFactory : MonoBehaviour {
 		action.canTargetEnemyPlayer = row._CANTARGETENEMYPLAYER;
 		action.canTargetSelf = row._CANTARGETSELF;
 		action.canTargetActors = row._CANTARGETACTORS;
+
+		action.id = type;
 	}
 
 
@@ -73,7 +76,7 @@ public class CardFactory : MonoBehaviour {
     }
 
     [RPC]
-    private void CreateActorRPC(string type, int id, int viewId)
+	public void CreateActorRPC(string type, int id, int viewId)
     {
         var playerId = (PlayerID)id;
         var row = _actorDB.GetRow(type);
@@ -82,7 +85,7 @@ public class CardFactory : MonoBehaviour {
 
         actor.GetComponent<PhotonView>().viewID = viewId;
 
-        actor.transform.SetParent(GameObject.Find("Cards").transform);
+		actor.transform.SetParent(CardsContainer);
         actor.transform.localScale = new Vector3(1f, 1f, 1f);
 
         actor.fullName = row._NAME;
@@ -94,6 +97,8 @@ public class CardFactory : MonoBehaviour {
         actor.gameObject.AddComponent(row._CARDEFFECT);
         actor.baseAttack = row._ATTACK;
         actor.baseReputation = row._REPUTATION;
+
+		actor.id = type;
     }
 
 
@@ -107,7 +112,7 @@ public class CardFactory : MonoBehaviour {
 	}
 
 	[RPC]
-	private void CreateContextRPC(string type, int id, int viewId) {
+	public void CreateContextRPC(string type, int id, int viewId) {
 		var playerId = (PlayerID)id;
 		var row = _trendingDB.GetRow(type);
 
@@ -115,7 +120,7 @@ public class CardFactory : MonoBehaviour {
 
 		context.GetComponent<PhotonView>().viewID = viewId;
 
-		context.transform.SetParent(GameObject.Find("Cards").transform);
+		context.transform.SetParent(CardsContainer);
 		context.transform.localScale = new Vector3(1f, 1f, 1f);
 
 		context.fullName = row._NAME;
@@ -129,6 +134,8 @@ public class CardFactory : MonoBehaviour {
 		context.baseReputation = 1;//row._REPUTATION;
 		context.corruptionMultiplier = row._CORRUPTIONMULT;
 		context.sexismeMultiplier = row._SEXISMEMULT;
+
+		context.id = type;
 	}
 
 

@@ -61,24 +61,46 @@ public class GameManager : MonoBehaviour {
 
 		// TODO
 
-		if (localPlayer == player1 || offlineMode) {
-			foreach (ActionDB.rowIds c in Enum.GetValues(typeof(ActionDB.rowIds))) {
-				CardFactory.Instance.CreateAction(c, PlayerID.Player1);
+
+		if (!PlayerPrefs.HasKey("deck")) return;
+
+		var playerid = localPlayer == player1 ? PlayerID.Player1 : PlayerID.Player2;
+
+		for (var i = 0; i < PlayerPrefs.GetInt("deck"); i++) {
+
+			var id = PlayerPrefs.GetString("deck_card_id_" + i);
+			var nb = PlayerPrefs.GetInt("deck_card_nb_" + i);
+
+
+			for (int j = 0; j < nb; j++) {
+				if(id.StartsWith("ACTION"))
+					CardFactory.Instance.CreateAction(id, playerid);
+				else if(id.StartsWith("ACTOR"))
+					CardFactory.Instance.CreateActor(id, playerid);
+				else if(id.StartsWith("TREND"))
+					CardFactory.Instance.CreateContext(id, playerid);
 			}
-
 		}
-		if(localPlayer == player2 || offlineMode){
-			CardFactory.Instance.CreateActor(ActorDB.rowIds.ACTOR_ANITASARKEESIAN, PlayerID.Player2);
-			CardFactory.Instance.CreateActor(ActorDB.rowIds.ACTOR_ANITASARKEESIAN, PlayerID.Player2);
-			CardFactory.Instance.CreateActor(ActorDB.rowIds.ACTOR_ANITASARKEESIAN, PlayerID.Player2);
-			CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_CONFESSION, PlayerID.Player2);
-			CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_REMISEDEPRIX, PlayerID.Player2);
-			CardFactory.Instance.CreateActor(ActorDB.rowIds.ACTOR_ANITASARKEESIAN, PlayerID.Player2);
-			CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_CONFESSION, PlayerID.Player2);
-			CardFactory.Instance.CreateAction(ActionDB.rowIds.ACTION_REMISEDEPRIX, PlayerID.Player2);
 
-		}		
 
+		if (!offlineMode) return;
+		playerid = localPlayer == player1 ? PlayerID.Player2 : PlayerID.Player1;
+
+		for (var i = 0; i < PlayerPrefs.GetInt("deck"); i++) {
+
+			var id = PlayerPrefs.GetString("deck_card_id_" + i);
+			var nb = PlayerPrefs.GetInt("deck_card_nb_" + i);
+
+
+			for (int j = 0; j < nb; j++) {
+				if (id.StartsWith("ACTION"))
+					CardFactory.Instance.CreateAction(id, playerid);
+				else if (id.StartsWith("ACTOR"))
+					CardFactory.Instance.CreateActor(id, playerid);
+				else if (id.StartsWith("TREND"))
+					CardFactory.Instance.CreateContext(id, playerid);
+			}
+		}
 	}
 	IEnumerator StartGame() {
 

@@ -73,11 +73,13 @@ public class Player : Target {
 
 		hand.Remove(c);
 		board.Add(c);
+		c.owner.corruption += c.corruptionCost;
+		c.owner.sexisme += c.sexismeCost;
 		c.place = Place.Board;
 		c.effect.OnPlacedOnBoard();
 	}
 
-	public void MoveToHand(Card actor) {
+	public void MoveToHand(CardActor actor) {
 		if (!board.Contains(actor))
 			return;
 
@@ -90,6 +92,10 @@ public class Player : Target {
 		actor.place = Place.Hand;
 		actor.attack = actor.baseAttack;
 		actor.reputation = actor.baseReputation;
+		actor.canAttack = false;
+		actor.preventAttack = false;
+
+
 	}
 
 	public void DrawRPC(int times = 1) {

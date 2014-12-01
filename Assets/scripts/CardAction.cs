@@ -1,3 +1,4 @@
+using GoogleFu;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
@@ -9,6 +10,7 @@ public class CardAction : Card {
 	public bool canTargetSelf = false;
 	public bool canTargetActors = false;
 
+	
 
     protected override void init(){
         base.init();

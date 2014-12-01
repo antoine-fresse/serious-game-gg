@@ -10,12 +10,33 @@ public abstract class AbstractCardEffect : MonoBehaviour {
 	public virtual void OnTurnEnd() { } // CardActor Only
 
 	public virtual void OnActionPerformed(Target target) { } // CardAction Only
-	public virtual void OnAttackPerformed(Target target) { } // CardActor Only
+
+	public virtual void OnAttackPerformed(Target target, int dmg) { // CardActor Only
+
+		var attacker = GetComponent<CardActor>();
+		if (target.TargetType == TargetType.Player) {
+			Player p = (Player)target;
+			p.ChangeReputation(-dmg);
+		} else if (target.TargetType == TargetType.Card) {
+			Card ca = (Card)target;
+			ca.ChangeReputation(-dmg);
+			attacker.ChangeReputation(-ca.attack);
+
+			// Riposte
+			ca.effect.OnAttackReceived(attacker);
+			
+		}
+	}
 
 	public virtual void OnPlacedOnBoard() { } // CardActor & CardContext Only
 	public virtual void OnDeath() { } // CardActor & CardContext Only
 
-	public virtual void OnAttackReceived(Target attacker) { } // CardActor Only
+	public virtual void OnAttackReceived(Target attacker) {
+		// Riposte
+		var atkr = attacker.GetComponent<CardActor>();
+		Card ca = GetComponent<CardActor>();
+		atkr.ChangeReputation(-ca.attack);
+	} // CardActor Only
 
 	public virtual void OnSelected() { }
 	public virtual void OnDeselected() { }

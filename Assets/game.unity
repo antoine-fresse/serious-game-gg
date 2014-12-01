@@ -574,7 +574,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 307832256}
           m_MethodName: OnClick
-          m_Mode: 1
+          m_Mode: 0
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine, Version=0.0.0.0,
@@ -805,7 +805,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 409697756}
           m_MethodName: OnClick
-          m_Mode: 1
+          m_Mode: 0
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine, Version=0.0.0.0,
@@ -1684,7 +1684,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 724180655}
           m_MethodName: OnClick
-          m_Mode: 1
+          m_Mode: 0
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine, Version=0.0.0.0,
@@ -2872,7 +2872,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 1359325395}
           m_MethodName: OnClick
-          m_Mode: 1
+          m_Mode: 0
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine, Version=0.0.0.0,
@@ -3107,7 +3107,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 1525974198}
           m_MethodName: OnClick
-          m_Mode: 1
+          m_Mode: 0
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine, Version=0.0.0.0,
@@ -3243,6 +3243,7 @@ MonoBehaviour:
   prefabAction: {fileID: 100004, guid: 9cf336e59979d7d4caf37b9ba72bff58, type: 2}
   prefabActor: {fileID: 100006, guid: ed459421bed0a0840996e37479a12913, type: 2}
   prefabContext: {fileID: 100004, guid: d207d81328b566740abdaab6dba83b71, type: 2}
+  CardsContainer: {fileID: 1097539228}
   photonView: {fileID: 0}
 --- !u!114 &1694704746
 MonoBehaviour:

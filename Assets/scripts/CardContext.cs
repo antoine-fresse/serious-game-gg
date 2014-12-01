@@ -1,3 +1,4 @@
+using GoogleFu;
 using UnityEngine;
 using System.Collections;
 
@@ -5,6 +6,8 @@ public class CardContext : Card {
 
     public float corruptionMultiplier = 1.0f;
     public float sexismeMultiplier = 1.0f;
+
+	
 
     // Use this for initialization
     protected override void init(){

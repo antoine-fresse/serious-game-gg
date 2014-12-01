@@ -1,4 +1,5 @@
 using DG.Tweening;
+using GoogleFu;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
@@ -9,7 +10,8 @@ public class CardActor : Card {
 
 	// Use this for initialization
 
-	
+	public bool preventAttack = false;
+
 	public Text cardStats;
 
     protected override void init(){
@@ -35,7 +37,7 @@ public class CardActor : Card {
 
 		Target c = PhotonView.Find(viewID).GetComponent<Target>();
 
-		effect.OnAttackPerformed(c);
+		effect.OnAttackPerformed(c, attack);
 
 		
 		var dir = (c.transform.position - transform.position) / 10f;
@@ -47,15 +49,17 @@ public class CardActor : Card {
 
     public override bool isValidTarget(Target t) {
 
-	    return effect.IsValidTarget(t);
+		return effect.IsValidTarget(t);
     }
 
     public override void OnTurnStart() {
 		if (place == Place.Board) {
-			canAttack = true;
+			canAttack = !preventAttack;
+			preventAttack = false;
 			effect.OnTurnStart();
 		}
     }
+
 
 
 
