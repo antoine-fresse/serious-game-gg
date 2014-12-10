@@ -9,7 +9,8 @@ public enum TargetType {
     Player,
     Card,
     Board,
-	Context
+	Context,
+	Graveyard
 }
 [RequireComponent(typeof(Selectable))]
 public abstract class Target : MonoBehaviour {

@@ -44,8 +44,8 @@ public class CardFactory : MonoBehaviour {
 
 		action.GetComponent<PhotonView>().viewID = viewId;
 
-		action.transform.SetParent(CardsContainer);
-		action.transform.localScale = new Vector3(1f,1f,1f);
+		action.transform.SetParent(CardsContainer, false);
+		//action.transform.localScale = new Vector3(1f,1f,1f);
 
 		action.fullName = row._NAME;
 		action.effectDesc = row._CARDEFFECTDESC;
@@ -85,8 +85,8 @@ public class CardFactory : MonoBehaviour {
 
         actor.GetComponent<PhotonView>().viewID = viewId;
 
-		actor.transform.SetParent(CardsContainer);
-        actor.transform.localScale = new Vector3(1f, 1f, 1f);
+		actor.transform.SetParent(CardsContainer,false);
+        //actor.transform.localScale = new Vector3(1f, 1f, 1f);
 
         actor.fullName = row._NAME;
         actor.effectDesc = row._CARDEFFECTDESC;
@@ -121,8 +121,8 @@ public class CardFactory : MonoBehaviour {
 
 		context.GetComponent<PhotonView>().viewID = viewId;
 
-		context.transform.SetParent(CardsContainer);
-		context.transform.localScale = new Vector3(1f, 1f, 1f);
+		context.transform.SetParent(CardsContainer, false);
+		//context.transform.localScale = new Vector3(1f, 1f, 1f);
 
 		context.fullName = row._NAME;
 		context.effectDesc = row._CARDEFFECTDESC;

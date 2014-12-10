@@ -54,7 +54,11 @@ public abstract class Card : Target {
 
 	public PlayerID ownerID;
 
+	public bool InAnimation = false;
+
 	public string id;
+
+
 
 	public Player owner {
 		get { return ownerID == PlayerID.Player1 ? GameManager.instance.player1 : GameManager.instance.player2; }
@@ -97,7 +101,7 @@ public abstract class Card : Target {
 
     protected override void init()
     {
-		base.init();	    
+		base.init();
         TargetType = TargetType.Card;
 	    attack = baseAttack;
 	    reputation = baseReputation;
@@ -144,6 +148,7 @@ public abstract class Card : Target {
     {
         if (isSelected)
         {
+			SoundManager.Instance.PlayCardShove();
             gameObject.GetComponent<Image>().sprite = spriteSelected;
 	        transform.DOScale(new Vector3(1.2f, 1.2f,1f), 0.2f);
 			effect.OnSelected();
@@ -177,7 +182,7 @@ public abstract class Card : Target {
         }
     }
 
-    public void destroy()
+    public void destroy(bool suicide = false)
     {
 		if (place == Place.Board) {
 			effect.OnDeath();
@@ -185,32 +190,57 @@ public abstract class Card : Target {
 	    show();
         owner.RemoveCard(this);
         place = Place.Graveyard;
-
+	    TargetType = TargetType.Graveyard;
 
 		transform.SetParent(owner.graveyardPos);
 	    
 
-	    Debug.Log(transform.DOKill());
 
-	    if (cardType == CardType.Action) {
+	    if (cardType == CardType.Action && !suicide) {
 		    transform.DOMove(GameObject.Find("Cards").transform.position, 0.5f);
-		    transform.DOMove(owner.graveyardPos.transform.position, 1.5f).SetDelay(1.5f);
+			transform.DOMove(owner.graveyardPos.transform.position, 1.5f).SetDelay(1.5f).SetEase(Ease.OutCubic);
 
 
 		    transform.DOScale(new Vector3(1.5f, 1.5f, 1.0f), 0.5f);
 		    transform.DOScale(Vector3.one, 1.0f).SetDelay(1.5f);
 	    }
 	    else {
-			transform.DOMove(owner.graveyardPos.transform.position, 1.5f);
+		    var cross = (RectTransform)Instantiate(Resources.Load<RectTransform>("Cross"));
+			cross.SetParent(transform, false);
+
+		    //cross.anchoredPosition = Vector2.zero;
+			
+		    cross.localScale = Vector3.one;
+
+			transform.DOMove(owner.graveyardPos.transform.position, 1.5f).SetDelay(1f).SetEase(Ease.OutCubic);
 	    }
 	    var outline = GetComponent<Outline>();
 	    var color = outline.effectColor;
 	    color.a = 0;
 	    outline.effectColor = color;
 
-	    GetComponent<EventTrigger>().enabled = false;
+	    //GetComponent<EventTrigger>().enabled = false;
 
 
     }
+
+	public void OnCursorEnter() {
+
+		if (place == Place.Deck || place == Place.Graveyard) return;
+		transform.DOScale(new Vector3(1.2f, 1.2f, 1f), 0.2f);
+
+
+		owner.HoveredCard = this;
+
+	}
+
+	public void OnCursorExit() {
+		
+		//if(owner.HoveredCard == this)
+			owner.HoveredCard = null;
+
+		if(GameManager.instance.cardSelected != this)
+			transform.DOScale(Vector3.one, 0.2f);
+	}
 }
 

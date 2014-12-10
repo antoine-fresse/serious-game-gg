@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
@@ -22,6 +23,8 @@ public class Player : Target {
     public List<Card> board;
 
 	public Board boardUI;
+
+	public Card HoveredCard = null;
 
 	public const int cardWidth = 128;
 	// Use this for initialization
@@ -77,12 +80,14 @@ public class Player : Target {
 		c.owner.IncreaseSexisme(c.sexismeCost);
 		c.place = Place.Board;
 		c.effect.OnPlacedOnBoard();
+		SoundManager.Instance.PlayCardSlide();
 	}
 
 	public void MoveToHand(CardActor actor) {
 		if (!board.Contains(actor))
 			return;
 
+		SoundManager.Instance.PlayCardSlide();
 		if (hand.Count >= MaxCardsInHand) {
 			actor.destroy();
 			return;
@@ -128,6 +133,7 @@ public class Player : Target {
 				card.place = Place.Hand;
 				card.effect.OnDraw();
 	            card.show();
+				SoundManager.Instance.PlayCardPlace();
 				photonView.RPC("HasDrawn", PhotonTargets.OthersBuffered, card.photonView.viewID);
 
                 Draw(times - 1);
@@ -142,6 +148,7 @@ public class Player : Target {
 		hand.Add(card);
 		card.place = Place.Hand;
 		card.effect.OnDraw();
+		SoundManager.Instance.PlayCardPlace();
 	}
 
     void Update() {
@@ -238,6 +245,7 @@ public class Player : Target {
     {
         foreach (var card in deck)
         {
+			if(card.InAnimation) continue;
 			card.transform.SetParent(deckPos);
             card.transform.localPosition = new Vector3(0, 0, 0);
             card.hide();
@@ -248,16 +256,34 @@ public class Player : Target {
 		
 
 	    var offsetX = Mathf.Min(handPos.rect.width/hand.Count, cardWidth);
-		var offset = new Vector3(offsetX , 0, 0);
-		Vector3 pos = new Vector3((-hand.Count/2) * offsetX,0,0);
+		var offset = new Vector3(offsetX , 0,0);
+		var pos = handPos.position + new Vector3((-hand.Count/2) * offsetX,0,0);
 	    //pos += offset/2;
 
-        foreach (var card in hand) {
-			card.GetComponent<RectTransform>().anchoredPosition = pos;
-			card.GetComponent<RectTransform>().SetParent(handPos);
-			
+	    if (HoveredCard) {
+		    if(HoveredCard.place == Place.Hand)
+				pos -= offset / 10f;
+	    }
+		    
 
-            pos += offset;
+        foreach (var card in hand) {
+
+	        var tr = card.GetComponent<RectTransform>();
+			tr.SetParent(handPos);
+
+	        if (HoveredCard == card)
+				pos += offset/10f;
+
+			if (transform.position != pos && !card.InAnimation) {
+				card.InAnimation = true;
+				var card1 = card;
+				card.transform.DOMove(pos, 0.5f).OnComplete(() => { card1.InAnimation = false; }).SetEase(Ease.OutCubic);
+			}
+
+			if (HoveredCard == card)
+				pos += offset/10f;
+
+	        pos += offset;
 
 	        if (GameManager.instance.offlineMode) {
 		        if (GameManager.instance.activePlayer() == this)
@@ -273,18 +299,31 @@ public class Player : Target {
 		        
 	        }
         }
+		
 
-		if (GameManager.instance.cardSelected)
+		if (GameManager.instance.cardSelected )
 			GameManager.instance.cardSelected.transform.SetAsLastSibling();
+
+		if (HoveredCard) {
+			HoveredCard.transform.SetAsLastSibling();
+		}
+
     }
 
     public void DisplayBoard() {
         Vector3 pos = boardPos.position + new Vector3(-cardWidth * board.Count / 2, 0, 0);
         var offset = new Vector3(cardWidth, 0, 0);
         foreach (var card in board) {
-			card.transform.SetParent(GameObject.Find("Cards").transform);
-            card.transform.position = pos;
-            pos += offset;
+
+	        
+		        card.transform.SetParent(GameObject.Find("Cards").transform);
+		        if (card.transform.position != pos && !card.InAnimation) {
+			        card.InAnimation = true;
+			        var card1 = card;
+					card.transform.DOMove(pos, 0.5f).SetEase(Ease.OutCubic).OnComplete(() => { card1.InAnimation = false; });
+		        }
+	        
+	        pos += offset;
 			card.show();
         }
     }
@@ -309,11 +348,11 @@ public class Player : Target {
     }
 
 
-    public bool isInHand(Card c) {
+    public bool IsInHand(Card c) {
         return hand.Contains(c);   
     }
 
-    public bool isInDeck(Card c) {
+    public bool IsInDeck(Card c) {
         return deck.Contains(c);
     }
 
@@ -344,6 +383,12 @@ public class Player : Target {
             deck.Remove(c);
     }
 
+
+	public void Discard(Card c) {
+		if (c.owner != this || c.place != Place.Hand) return;
+		photonView.RPC("DiscardRPC", PhotonTargets.AllBuffered, c.photonView.viewID);
+	}
+
 	public void Discard(int nb) {
 
 		if (this != GameManager.instance.localPlayer && !GameManager.instance.offlineMode)
@@ -361,7 +406,7 @@ public class Player : Target {
 	}
 	[RPC]
 	void DiscardRPC(int viewId) {
-		PhotonView.Find(viewId).GetComponent<Card>().destroy();
+		PhotonView.Find(viewId).GetComponent<Card>().destroy(true);
 	}
 
 	public void Swap() {

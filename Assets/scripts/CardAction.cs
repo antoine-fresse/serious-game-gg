@@ -29,7 +29,7 @@ public class CardAction : Card {
 		Target t = PhotonView.Find(viewID).GetComponent<Target>();
 
 
-		
+		SoundManager.Instance.PlayCardFlip();
 
 		show();
 
@@ -38,6 +38,8 @@ public class CardAction : Card {
 		owner.IncreaseCorruption(corruptionCost);
 		owner.IncreaseSexisme(sexismeCost);
 
+
+		t.transform.DOShakeScale(0.5f, .5f);
 
 		effect.OnActionPerformed(t);
 

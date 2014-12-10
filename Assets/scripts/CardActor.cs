@@ -27,7 +27,7 @@ public class CardActor : Card {
 		attackText += attack;
 		attackText += attack < baseAttack || attack > baseAttack ? "</color>" : "";
 
-		string reputationText = reputation < baseReputation ? "<color=maroon>" : (reputation > baseReputation ? "<color=olive>" : "");
+		string reputationText = reputation < baseReputation ? "<color=maroon>" : (reputation > baseReputation ? "<color=green>" : "");
 		reputationText += reputation;
 		reputationText += (reputation < baseReputation || reputation > baseReputation) ? "</color>" : "";
 
@@ -43,7 +43,9 @@ public class CardActor : Card {
 
 		
 		var dir = (c.transform.position - transform.position) / 10f;
-		transform.DOPunchPosition(dir, Mathf.Clamp(dir.sqrMagnitude / 100f, 0.5f, 1f), 0, 0);
+		InAnimation = true;
+		transform.DOPunchPosition(dir, Mathf.Clamp(dir.sqrMagnitude / 100f, 0.5f, 1f), 0, 0).OnComplete(()=>InAnimation=false);
+		SoundManager.Instance.PlayCardHit();
 		canAttack = false;
 		//selectable.interactable = false;
 	}

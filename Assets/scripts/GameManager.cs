@@ -190,6 +190,7 @@ public class GameManager : MonoBehaviour {
 		contextCard.show();
 
 		contextCard.TargetType = TargetType.Context;
+		SoundManager.Instance.PlayCardSlide();
 	}
 
 	public void EndTurn() {
@@ -291,6 +292,15 @@ public class GameManager : MonoBehaviour {
 						}
 					}
 		                break;
+					case TargetType.Graveyard: {
+						if (cardSelected.place == Place.Hand) {
+							activePlayer().Discard(cardSelected);
+							cardSelected.setSelected(false);
+							cardSelected = null;
+							activePlayer().ResetOutlines(true);
+						}
+					}
+						break;
                 }
 				// If we have a valid target, we use the card
                 if (result) {
