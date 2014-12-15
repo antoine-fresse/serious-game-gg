@@ -33,6 +33,10 @@ public class GameManager : MonoBehaviour {
 	public Text startGameText;
 
 	public bool gameEnded = false;
+	private bool _gameStarted = false;
+
+	private float _timeElapsed = 0f;
+	public Slider SliderTimer;
 
 
 	// Use this for initialization
@@ -148,10 +152,14 @@ public class GameManager : MonoBehaviour {
 			DOTween.Sequence()
 				.Append(yourTurnText.DOLocalMove(new Vector3(0f, 0f, 0f), 1.0f).SetEase(Ease.OutBounce))
 				.AppendInterval(1.0f)
-				.Append(yourTurnText.DOLocalMove(new Vector3(0f, (float)Screen.height * 2f, 0f), 0f));
+				.Append(yourTurnText.DOLocalMove(new Vector3(0f, (float) Screen.height*2f, 0f), 0f));
 			buttonEndTurn.interactable = true;
+			buttonEndTurn.GetComponentInChildren<Text>().text = "Finir mon tour";
 		}
-
+		else {
+			buttonEndTurn.GetComponentInChildren<Text>().text = "Tour de l'adversaire en cours";
+		}
+		_gameStarted = true;
 		activePlayer().OnTurnStart();
 	}
 
@@ -160,19 +168,38 @@ public class GameManager : MonoBehaviour {
 			contextCard.transform.SetParent(contextRect);
 		    contextCard.transform.localPosition = Vector3.zero;
 	    }
+
+	    if (_gameStarted) {
+		    _timeElapsed += Time.deltaTime;
+	    }
+	    SliderTimer.value = _timeElapsed;
+	    if (localPlayerTurn && _timeElapsed >= 60f) {
+		    _timeElapsed = 0f;
+			EndTurn();
+	    }
+
     }
 
     public void playerDied(Player deadPlayer) {
 	    gameEnded = true;
 
+	    /*player1.ClearAll();
+		player2.ClearAll();
+
+	    if (contextCard)
+		    contextCard.transform.localScale = Vector3.zero;*/
+
+
 	    if (deadPlayer == localPlayer) {
 		    yourTurnText.GetComponent<Text>().text = "Vous avez perdu !";
+			SoundManager.Instance.PlayDefeatSound();
 		    DOTween.Sequence()
 				.Append(yourTurnText.DOLocalMove(new Vector3(0f, 0f, 0f), 1.0f).SetEase(Ease.OutBounce));
 	    }
 
 	    else {
 			yourTurnText.GetComponent<Text>().text = "Victoire !";
+			SoundManager.Instance.PlayVictorySound();
 			DOTween.Sequence()
 				.Append(yourTurnText.DOLocalMove(new Vector3(0f, 0f, 0f), 1.0f).SetEase(Ease.OutBounce));
 	    }
@@ -209,17 +236,23 @@ public class GameManager : MonoBehaviour {
 			cardSelected = null;
 		}
 		if (localPlayerTurn) {
-		    DOTween.Sequence()
+			DOTween.Sequence()
 				.Append(yourTurnText.DOLocalMove(new Vector3(0f, 0f, 0f), 1.0f).SetEase(Ease.OutBounce))
-			    .AppendInterval(1.0f)
-				.Append(yourTurnText.DOLocalMove(new Vector3(0f, (float)Screen.height * 2f, 0f), 0f));
+				.AppendInterval(1.0f)
+				.Append(yourTurnText.DOLocalMove(new Vector3(0f, (float) Screen.height*2f, 0f), 0f));
 			buttonEndTurn.interactable = true;
+			buttonEndTurn.GetComponentInChildren<Text>().text = "Finir mon tour";
+
+
 		}
-		else 
+		else {
 			buttonEndTurn.interactable = offlineMode;
-		
+			buttonEndTurn.GetComponentInChildren<Text>().text = "Tour de l'adversaire en cours";
+		}
+		_timeElapsed = 0f;
         activePlayer().OnTurnStart();
     }
+
 
     public Player activePlayer()
     {

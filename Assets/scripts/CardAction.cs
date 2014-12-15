@@ -39,7 +39,10 @@ public class CardAction : Card {
 		owner.IncreaseSexisme(sexismeCost);
 
 
-		t.transform.DOShakeScale(0.5f, .5f);
+		if (t.TargetType == TargetType.Player)
+			t.transform.DOShakeScale(.5f, .5f);
+		else
+			t.transform.DOShakeRotation(1f, new Vector3(0f, 0f, 30f));
 
 		effect.OnActionPerformed(t);
 

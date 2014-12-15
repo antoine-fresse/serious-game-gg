@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class SoundManager : MonoBehaviour {
@@ -9,6 +9,10 @@ public class SoundManager : MonoBehaviour {
 	private AudioClip[] _cardSlide;
 	private AudioClip[] _cardHit;
 	private AudioClip[] _cardFlip;
+
+	private AudioClip _defeatClip;
+	private AudioClip _victoryClip;
+
 	public AudioSource Source;
 
 	void Awake() {
@@ -19,6 +23,9 @@ public class SoundManager : MonoBehaviour {
 		_cardSlide = Resources.LoadAll<AudioClip>("Slide");
 		_cardHit = Resources.LoadAll<AudioClip>("Hit");
 		_cardFlip = Resources.LoadAll<AudioClip>("Flip");
+
+		_defeatClip = Resources.Load<AudioClip>("perduSon");
+		_victoryClip = Resources.Load<AudioClip>("applause");
 	}
 
 	void Start() {
@@ -47,4 +54,12 @@ public class SoundManager : MonoBehaviour {
 		var n = Random.Range(0, _cardFlip.Length - 1);
 		Source.PlayOneShot(_cardFlip[n]);
 	}
+
+	public void PlayVictorySound() {
+		Source.PlayOneShot(_victoryClip);
+	}
+	public void PlayDefeatSound() {
+		Source.PlayOneShot(_defeatClip);
+	}
+
 }

@@ -26,13 +26,33 @@ public class Player : Target {
 
 	public Card HoveredCard = null;
 
-	public const int cardWidth = 128;
+	public const int cardWidth = 136;
 	// Use this for initialization
 
     protected override void init(){
 		base.init();
         TargetType = TargetType.Player;
     }
+
+	public void ClearAll() {
+		foreach (var card in hand) {
+			card.transform.localScale = Vector3.zero;
+		}
+		foreach (var card in deck) {
+			card.transform.localScale = Vector3.zero;
+		}
+		foreach (var card in board) {
+			card.transform.localScale = Vector3.zero;
+		}
+
+		foreach (Transform card in graveyardPos.transform) {
+			card.localScale = Vector3.zero;
+		}
+
+		hand.Clear();
+		deck.Clear();
+		board.Clear();
+	}
 
 
     public void OnTurnStart()

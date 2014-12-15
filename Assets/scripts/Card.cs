@@ -237,7 +237,7 @@ public abstract class Card : Target {
 	public void OnCursorExit() {
 		
 		//if(owner.HoveredCard == this)
-			owner.HoveredCard = null;
+		owner.HoveredCard = null;
 
 		if(GameManager.instance.cardSelected != this)
 			transform.DOScale(Vector3.one, 0.2f);
