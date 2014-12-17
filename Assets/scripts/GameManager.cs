@@ -38,7 +38,7 @@ public class GameManager : MonoBehaviour {
 	private float _timeElapsed = 0f;
 	public Slider SliderTimer;
 
-
+	public EndScreen End;
 	// Use this for initialization
 	void Awake () {
         instance = this;
@@ -74,7 +74,9 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void LeaveGame() {
-		Application.Quit();
+		PhotonNetwork.LeaveRoom();
+		PhotonNetwork.LoadLevel(0); 
+		//Application.Quit();
 	}
 
 	void OnPhotonPlayerDisconnected() {
@@ -166,7 +168,15 @@ public class GameManager : MonoBehaviour {
     void Update() {
 	    if (contextCard) {
 			contextCard.transform.SetParent(contextRect);
-		    contextCard.transform.localPosition = Vector3.zero;
+		    if (!contextCard.InAnimation) {
+			    if (contextCard.transform.localPosition != Vector3.zero) {
+				    contextCard.transform.DOLocalMove(Vector3.zero, 1.0f);
+				    contextCard.InAnimation = true;
+			    }
+		    }
+			
+		    
+		    //contextCard.transform.localPosition = Vector3.zero;
 	    }
 
 	    if (_gameStarted) {
@@ -191,19 +201,25 @@ public class GameManager : MonoBehaviour {
 
 
 	    if (deadPlayer == localPlayer) {
+		    LocalHasLost = true;
 		    yourTurnText.GetComponent<Text>().text = "Vous avez perdu !";
 			SoundManager.Instance.PlayDefeatSound();
 		    DOTween.Sequence()
-				.Append(yourTurnText.DOLocalMove(new Vector3(0f, 0f, 0f), 1.0f).SetEase(Ease.OutBounce));
+				.Append(yourTurnText.DOLocalMove(new Vector3(0f, 285f, 0f), 1.0f).SetEase(Ease.OutBounce));
 	    }
 
 	    else {
+			LocalHasLost = false;
 			yourTurnText.GetComponent<Text>().text = "Victoire !";
 			SoundManager.Instance.PlayVictorySound();
 			DOTween.Sequence()
-				.Append(yourTurnText.DOLocalMove(new Vector3(0f, 0f, 0f), 1.0f).SetEase(Ease.OutBounce));
+				.Append(yourTurnText.DOLocalMove(new Vector3(0f, 285f, 0f), 1.0f).SetEase(Ease.OutBounce));
 	    }
+
+		End.ShowPanel();
     }
+
+	public bool? LocalHasLost = null;
 
 	[RPC]
 	void SetContext(int viewID) {
@@ -227,14 +243,15 @@ public class GameManager : MonoBehaviour {
 	[RPC]
     void EndTurnRPC()
     {
-		activePlayer().OnTurnEnd();
-
-	    localPlayerTurn = !localPlayerTurn;
-
 		if (cardSelected) {
 			cardSelected.setSelected(false);
 			cardSelected = null;
 		}
+		activePlayer().OnTurnEnd();
+
+	    localPlayerTurn = !localPlayerTurn;
+
+		
 		if (localPlayerTurn) {
 			DOTween.Sequence()
 				.Append(yourTurnText.DOLocalMove(new Vector3(0f, 0f, 0f), 1.0f).SetEase(Ease.OutBounce))

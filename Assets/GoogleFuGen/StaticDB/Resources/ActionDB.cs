@@ -232,7 +232,7 @@ namespace GoogleFu
 		private ActionDB()
 		{
 			Rows.Add( new ActionDBRow("Censure",
-														"Suppression massive de commentaires sur reddit - liens entre zoe quinn et un mod\u00e9rateur",
+														"Suppression massive de commentaires sur reddit \u00e0 plusieurs reprises",
 														"2",
 														"0",
 														"DiscardEffect",
@@ -244,7 +244,7 @@ namespace GoogleFu
 														"FALSE",
 														"FALSE"));
 			Rows.Add( new ActionDBRow("D\u00e9claration sans fondement",
-														"Inconsistencies in ZQ claim",
+														"",
 														"0",
 														"2",
 														"DefaultEffect",
@@ -256,7 +256,7 @@ namespace GoogleFu
 														"FALSE",
 														"TRUE"));
 			Rows.Add( new ActionDBRow("Remise de prix truqu\u00e9e",
-														"Indiecade corruption ZQ gagne. award selectionn\u00e9 par un qqn avec qui elle avait une relation",
+														"Relation intime avec un membre du jury",
 														"2",
 														"0",
 														"ChangeStatsEffect",
@@ -268,7 +268,7 @@ namespace GoogleFu
 														"TRUE",
 														"FALSE"));
 			Rows.Add( new ActionDBRow("Abus de plainte DMCA",
-														"Zoe Quinn est accus\u00e9e d'utiliser les paintes DMCA pour retirer des critiques n\u00e9gatives de youtube",
+														"L'utilisation de plaintes DMCA est parfois abus\u00e9e pour retirer des critiques n\u00e9gatives de Youtube",
 														"3",
 														"0",
 														"DiscardEffect",
@@ -280,7 +280,7 @@ namespace GoogleFu
 														"FALSE",
 														"FALSE"));
 			Rows.Add( new ActionDBRow("Kickstarter r\u00e9ussi",
-														"TFYC atteignent leur objectif de financement sur indiegogo",
+														"Objectif de financement participatif atteint !",
 														"0",
 														"0",
 														"DrawEffect",
@@ -292,7 +292,7 @@ namespace GoogleFu
 														"TRUE",
 														"FALSE"));
 			Rows.Add( new ActionDBRow("Alerte \u00e0 la bombe",
-														"-",
+														"De fausses alertes \u00e0 la bombes ont \u00e9t\u00e9 utilis\u00e9es pour dissuader des discours",
 														"0",
 														"5",
 														"DestroyIfCostEffect",
@@ -304,7 +304,7 @@ namespace GoogleFu
 														"FALSE",
 														"TRUE"));
 			Rows.Add( new ActionDBRow("Gamers are dead",
-														"-",
+														"Plusieurs sites sont soupconn\u00e9s de s'\u00eatre arrang\u00e9s pour une s\u00e9rie d'articles simultan\u00e9s",
 														"5",
 														"0",
 														"DestroyIfCostEffect",
@@ -316,7 +316,7 @@ namespace GoogleFu
 														"FALSE",
 														"TRUE"));
 			Rows.Add( new ActionDBRow("Menaces de mort",
-														"-",
+														"Certaines personnalit\u00e9s feminine recoivent en permanence des menaces de mort",
 														"0",
 														"5",
 														"SendToHandEffect",
@@ -328,7 +328,7 @@ namespace GoogleFu
 														"FALSE",
 														"TRUE"));
 			Rows.Add( new ActionDBRow("Hack de 4chan",
-														"-",
+														"Les utilisateurs anonymes de 4chan, bien qu'ayant des m\u00e9thodes douteuse, soutiennent The Fine Young Capitalists",
 														"2",
 														"0",
 														"ChangePlayerStatsEffect",
@@ -340,7 +340,7 @@ namespace GoogleFu
 														"FALSE",
 														"FALSE"));
 			Rows.Add( new ActionDBRow("Retirer les publicit\u00e9s",
-														"-",
+														"Intel a temporairement retir\u00e9 ses publicit\u00e9s de Gamasutra suite la pression du mouvement GamerGate",
 														"0",
 														"2",
 														"ChangeStatsEffect",
@@ -352,7 +352,7 @@ namespace GoogleFu
 														"FALSE",
 														"TRUE"));
 			Rows.Add( new ActionDBRow("Confession",
-														"-",
+														"",
 														"0",
 														"0",
 														"ChangeHighestPlayerStatEffect",
@@ -364,7 +364,7 @@ namespace GoogleFu
 														"TRUE",
 														"FALSE"));
 			Rows.Add( new ActionDBRow("Harcelement",
-														"-",
+														"Le mouvement GamerGate a attir\u00e9 le support de personnes tr\u00e8s vocales, utilisant le harcelement pour effrayer l'opposition",
 														"0",
 														"3",
 														"PreventAttackEffect",

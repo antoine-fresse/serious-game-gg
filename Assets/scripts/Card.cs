@@ -146,18 +146,25 @@ public abstract class Card : Target {
 
     public void setSelected(bool isSelected)
     {
+		
         if (isSelected)
         {
 			SoundManager.Instance.PlayCardShove();
             gameObject.GetComponent<Image>().sprite = spriteSelected;
 	        transform.DOScale(new Vector3(1.2f, 1.2f,1f), 0.2f);
 			effect.OnSelected();
+
+	        var outline = GetComponent<Outline>();
+			outline.effectColor = new Color(0f,78f/255f,128f/255f);
+
         }
         else
         {
             gameObject.GetComponent<Image>().sprite = spriteNormal;
 			transform.DOScale(new Vector3(1.0f, 1.0f, 1f), 0.2f);
 			effect.OnDeselected();
+			var outline = GetComponent<Outline>();
+			outline.effectColor = new Color(78f / 255f, 128f / 255f, 0f,0f);
         }
     }
 
@@ -225,7 +232,7 @@ public abstract class Card : Target {
     }
 
 	public void OnCursorEnter() {
-
+		if (DeckManager.Instance) return;
 		if (place == Place.Deck || place == Place.Graveyard) return;
 		transform.DOScale(new Vector3(1.2f, 1.2f, 1f), 0.2f);
 
@@ -235,7 +242,8 @@ public abstract class Card : Target {
 	}
 
 	public void OnCursorExit() {
-		
+
+		if (DeckManager.Instance) return;
 		//if(owner.HoveredCard == this)
 		owner.HoveredCard = null;
 

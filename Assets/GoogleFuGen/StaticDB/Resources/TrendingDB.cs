@@ -142,10 +142,10 @@ namespace GoogleFu
 		private TrendingDB()
 		{
 			Rows.Add( new TrendingDBRow("#GamerGate is trending",
-														"",
+														"Le hashtag a l'origine du d\u00e9bat",
 														"2",
 														"0.5",
-														"Double les malus de corruption et reduit les malus de sexisme",
+														"Double les malus de corruption et reduit de moiti\u00e9 les malus de sexisme",
 														"DefaultEffect"));
 			Rows.Add( new TrendingDBRow("#NotYourShield is trending",
 														"Hashtag utilis\u00e9 par les minorit\u00e9s parmis les gamers",
@@ -160,13 +160,13 @@ namespace GoogleFu
 														"Aucun effet",
 														"DefaultEffect"));
 			Rows.Add( new TrendingDBRow("#StopGamerGate is trending",
-														"",
+														"Ce hashtag pousse \u00e0 arr\u00eater un d\u00e9bat devenu st\u00e9rile",
 														"0.5",
 														"2",
-														"Double les malus de sexisme et reduit les malus de corruption",
+														"Double les malus de sexisme et reduit de moiti\u00e9 les malus de corruption",
 														"DefaultEffect"));
 			Rows.Add( new TrendingDBRow("#TropesVsWomen is trending",
-														"",
+														"La s\u00e9rie de vid\u00e9os Youtube qui examine la repr\u00e9sentation des femmes dans les jeux-vid\u00e9os",
 														"1",
 														"2",
 														"Double les malus de sexisme",

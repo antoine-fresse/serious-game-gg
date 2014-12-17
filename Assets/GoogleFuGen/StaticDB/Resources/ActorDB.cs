@@ -175,10 +175,10 @@ namespace GoogleFu
 	public sealed class ActorDB
 	{
 		public enum rowIds {
-			ACTOR_ADAMBALDWIN, ACTOR_ZOEQUINN, ACTOR_TFYC, ACTOR_DANIELVAVRA, ACTOR_MUNDANEMATT, ACTOR_TOTALBISCUIT, ACTOR_KOTAKU, ACTOR_GEORGESREESE, ACTOR_GAMASUTRA, ACTOR_POLYGON, ACTOR_ANITASARKEESIAN, ACTOR_INTERNETARISTOCRAT, ACTOR_DANIELLERIENDEAU
+			ACTOR_ADAMBALDWIN, ACTOR_ZOEQUINN, ACTOR_TFYC, ACTOR_DEV, ACTOR_MUNDANEMATT, ACTOR_TOTALBISCUIT, ACTOR_KOTAKU, ACTOR_GEORGESREESE, ACTOR_GAMASUTRA, ACTOR_POLYGON, ACTOR_ANITASARKEESIAN, ACTOR_INTERNETARISTOCRAT, ACTOR_CORRUPTEDJOURNALIST
 		};
 		public string [] rowNames = {
-			"ACTOR_ADAMBALDWIN", "ACTOR_ZOEQUINN", "ACTOR_TFYC", "ACTOR_DANIELVAVRA", "ACTOR_MUNDANEMATT", "ACTOR_TOTALBISCUIT", "ACTOR_KOTAKU", "ACTOR_GEORGESREESE", "ACTOR_GAMASUTRA", "ACTOR_POLYGON", "ACTOR_ANITASARKEESIAN", "ACTOR_INTERNETARISTOCRAT", "ACTOR_DANIELLERIENDEAU"
+			"ACTOR_ADAMBALDWIN", "ACTOR_ZOEQUINN", "ACTOR_TFYC", "ACTOR_DEV", "ACTOR_MUNDANEMATT", "ACTOR_TOTALBISCUIT", "ACTOR_KOTAKU", "ACTOR_GEORGESREESE", "ACTOR_GAMASUTRA", "ACTOR_POLYGON", "ACTOR_ANITASARKEESIAN", "ACTOR_INTERNETARISTOCRAT", "ACTOR_CORRUPTEDJOURNALIST"
 		};
 		public System.Collections.Generic.List<ActorDBRow> Rows = new System.Collections.Generic.List<ActorDBRow>();
 
@@ -197,7 +197,7 @@ namespace GoogleFu
 		{
 			Rows.Add( new ActorDBRow("Adam Baldwin",
 														"GamerGate",
-														"28 aout - adam baldwin lance le hashtag #GamerGate",
+														"L'acteur Adam Baldwin a \u00e9t\u00e9 le premier \u00e0 utiliser le hashtag #GamerGate",
 														"0",
 														"3",
 														"0",
@@ -207,7 +207,7 @@ namespace GoogleFu
 														"2"));
 			Rows.Add( new ActorDBRow("Zoe Quinn",
 														"Anti-GamerGate",
-														"Zoe Quinn",
+														"Developpeuse de jeu \u00e0 l'origine du scandale",
 														"8",
 														"0",
 														"5",
@@ -217,7 +217,7 @@ namespace GoogleFu
 														"0"));
 			Rows.Add( new ActorDBRow("The Fine Young Capitalists",
 														"None",
-														"Groupe feministe qui a pour but d'aider les femmes dev",
+														"Groupe feministe qui a pour but de supporter des femmes dans le developpement de jeux",
 														"0",
 														"0",
 														"1",
@@ -225,9 +225,9 @@ namespace GoogleFu
 														"BonusDamageFromSexismeEffect",
 														"Inflige des d\u00e9gats bonus \u00e9quivalents au sexisme adverse",
 														"0"));
-			Rows.Add( new ActorDBRow("Daniel Vavra",
+			Rows.Add( new ActorDBRow("Developpeur",
 														"GamerGate",
-														"Designer de la saga \"Mafia\"",
+														"",
 														"0",
 														"3",
 														"3",
@@ -247,7 +247,7 @@ namespace GoogleFu
 														"0"));
 			Rows.Add( new ActorDBRow("TotalBiscuit",
 														"GamerGate",
-														"Youtuber",
+														"Youtuber, ancien caster professionnel d'eSports",
 														"0",
 														"0",
 														"1",
@@ -257,7 +257,7 @@ namespace GoogleFu
 														"2"));
 			Rows.Add( new ActorDBRow("Kotaku",
 														"News Website",
-														"Gaming news website",
+														"Site de news sur les jeux vid\u00e9os",
 														"0",
 														"0",
 														"3",
@@ -265,9 +265,9 @@ namespace GoogleFu
 														"DefaultEffect",
 														"",
 														"0"));
-			Rows.Add( new ActorDBRow("Georges Reese",
+			Rows.Add( new ActorDBRow("Feministe en col\u00e8re",
 														"Anti-GamerGate",
-														"Dell - A compar\u00e9 GamerGate au groupe terroriste ISIS",
+														"",
 														"4",
 														"0",
 														"4",
@@ -277,7 +277,7 @@ namespace GoogleFu
 														"0"));
 			Rows.Add( new ActorDBRow("Gamasutra",
 														"News Website",
-														"Gaming news website",
+														"Site de news sur les jeux vid\u00e9os",
 														"2",
 														"0",
 														"2",
@@ -287,7 +287,7 @@ namespace GoogleFu
 														"1"));
 			Rows.Add( new ActorDBRow("Polygon",
 														"News Website",
-														"Gaming news website",
+														"Site de news sur les jeux vid\u00e9os",
 														"6",
 														"0",
 														"5",
@@ -297,7 +297,7 @@ namespace GoogleFu
 														"0"));
 			Rows.Add( new ActorDBRow("Anita Sarkeesian",
 														"Anti-GamerGate",
-														"Feministe",
+														"Feministe - Auteur de Tropes vs Women",
 														"3",
 														"0",
 														"0",
@@ -315,9 +315,9 @@ namespace GoogleFu
 														"DefaultEffect",
 														"",
 														"0"));
-			Rows.Add( new ActorDBRow("Danielle Riendeau",
+			Rows.Add( new ActorDBRow("Journaliste corrompu",
 														"Anti-GamerGate",
-														"Journaliste - A donn\u00e9 une note de 10/10 au jeu d'un ami",
+														"Donne des notes excellentes aux jeux de ses amis",
 														"3",
 														"0",
 														"3",

@@ -198,7 +198,7 @@ public class Player : Target {
 		foreach (var card in hand) {
 			outline = card.GetComponent<Outline>();
 			col = outline.effectColor;
-			col.a = 0;
+			col.a = card == GameManager.instance.cardSelected ? 255 : 0;
 			outline.effectColor = col;
 		}
 
